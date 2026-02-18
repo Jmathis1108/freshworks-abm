@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freshdesk Omni for Uber: One platform for drivers, riders, and every city in between</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-900:#014D22;--green-700:#017732;--green-500:#1EA95C;--green-400:#3DC874;
+  --green-100:#D6F5E4;--green-50:#F0FBF5;
+  --ink:#0D1117;--ink-800:#1C2333;--ink-600:#374151;--ink-400:#6B7280;
+  --ink-200:#D1D5DB;--ink-100:#F3F4F6;--ink-50:#F9FAFB;--white:#FFFFFF;
+  --mint:#00C389;--mint-dim:rgba(0,195,137,0.12);--mint-border:rgba(0,195,137,0.25);
+  --uber-black:#000000;--uber-gold:#F5A623;--uber-gold-dim:rgba(245,166,35,0.1);
+  --shadow-sm:0  1px 3px rgba(0,0,0,0.08);--shadow-md:0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg:0 16px 48px rgba(0,0,0,0.10);--shadow-xl:0 32px 64px rgba(0,0,0,0.12);
+  --font-sans:'DM Sans',-apple-system,sans-serif;
+  --font-serif:'DM Serif Display',Georgia,serif;
+  --max:1200px;--radius:12px;--radius-lg:20px;--radius-xl:28px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--font-sans);background:var(--white);color:var(--ink);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+
+.nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--ink-200)}
+.nav-inner{max-width:var(--max);margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:68px}
+.fw-logo img{height:28px;width:auto}
+.nav-links{display:flex;align-items:center;gap:2px;list-style:none}
+.nav-links a{padding:7px 14px;border-radius:8px;font-size:0.875rem;font-weight:500;color:var(--ink-600);transition:background .15s,color .15s}
+.nav-links a:hover{background:var(--ink-100);color:var(--ink)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font-family:var(--font-sans);font-size:0.875rem;font-weight:600;border:none;cursor:pointer;border-radius:9px;transition:all .18s;white-space:nowrap}
+.btn-sm{padding:8px 18px}.btn-lg{padding:14px 30px;font-size:0.95rem;border-radius:10px}
+.btn-ghost{background:transparent;color:var(--ink-600);border:1px solid var(--ink-200)}
+.btn-ghost:hover{background:var(--ink-100);border-color:var(--ink-400);color:var(--ink)}
+.btn-green{background:var(--green-700);color:var(--white);box-shadow:0 1px 3px rgba(1,119,50,0.25)}
+.btn-green:hover{background:var(--green-900);box-shadow:0 4px 16px rgba(1,119,50,0.4);transform:translateY(-1px)}
+.btn-outline-green{background:transparent;color:var(--green-700);border:1.5px solid var(--green-700)}
+.btn-outline-green:hover{background:var(--green-50);transform:translateY(-1px)}
+
+.hero{background:linear-gradient(180deg,var(--ink-50) 0%,var(--white) 60%);padding:80px 40px 0;overflow:hidden;position:relative}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(1,119,50,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(1,119,50,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none}
+.hero-inner{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:flex-start;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--green-100);color:var(--green-700);font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px 5px 8px;border-radius:100px;margin-bottom:22px}
+.eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--green-700);animation:pulse 2.5s ease infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.8)}}
+h1.hero-h{font-family:var(--font-serif);font-size:3rem;line-height:1.1;color:var(--ink);margin-bottom:22px;font-weight:400}
+h1.hero-h em{font-style:italic;color:var(--green-700)}
+.hero-sub{font-size:1.05rem;line-height:1.72;color:var(--ink-400);max-width:480px;margin-bottom:36px}
+.hero-ctas{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:36px}
+.hero-proof{display:flex;align-items:center;gap:10px;font-size:0.82rem;color:var(--ink-400)}
+.proof-avatars{display:flex}
+.proof-avatar{width:28px;height:28px;border-radius:50%;border:2px solid var(--white);margin-left:-8px;display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:700;color:var(--white)}
+.proof-avatar:first-child{margin-left:0}
+.pa-1{background:linear-gradient(135deg,#1C1C1C,#374151)}
+.pa-2{background:linear-gradient(135deg,var(--green-700),var(--mint))}
+.pa-3{background:linear-gradient(135deg,#E50914,#F97316)}
+.pa-4{background:linear-gradient(135deg,#0B5CFF,#3B82F6)}
+
+.hero-visual{position:relative}
+.hero-float-1{position:absolute;top:-12px;right:-20px;z-index:10;background:var(--white);border:1px solid var(--ink-200);border-radius:var(--radius);padding:10px 14px;box-shadow:var(--shadow-md);display:flex;align-items:center;gap:9px;font-size:0.8rem;font-weight:600;color:var(--ink);white-space:nowrap}
+.hero-float-2{position:absolute;bottom:48px;left:-24px;z-index:10;background:var(--ink-800);border-radius:var(--radius);padding:10px 14px;box-shadow:var(--shadow-md);display:flex;align-items:center;gap:9px;font-size:0.78rem;font-weight:600;color:var(--white);white-space:nowrap}
+.float-green{color:var(--mint)}
+.float-gold{color:var(--uber-gold)}
+
+.cc{background:var(--white);border:1px solid var(--ink-200);border-radius:var(--radius-xl) var(--radius-xl) 0 0;box-shadow:var(--shadow-xl);overflow:hidden}
+.cc-bar{background:var(--ink-800);padding:10px 18px;display:flex;align-items:center;justify-content:space-between}
+.cc-dots{display:flex;gap:5px}
+.cd{width:10px;height:10px;border-radius:50%}
+.cd-r{background:#FF5F57}.cd-y{background:#FEBC2E}.cd-g{background:#28C840}
+.cc-label{font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5);letter-spacing:0.05em}
+.cc-live{display:flex;align-items:center;gap:5px;font-size:0.7rem;font-weight:700;color:var(--mint)}
+.cc-live-dot{width:6px;height:6px;border-radius:50%;background:var(--mint);animation:pulse 2s ease infinite}
+.cc-layout{display:grid;grid-template-columns:196px 1fr;min-height:380px}
+.cc-sidebar{background:var(--ink-50);border-right:1px solid var(--ink-200);padding:14px 10px;display:flex;flex-direction:column;gap:2px}
+.cc-nav{padding:8px 10px;border-radius:8px;font-size:0.78rem;font-weight:500;color:var(--ink-400);display:flex;align-items:center;gap:8px}
+.cc-nav.on{background:var(--green-100);color:var(--green-700);font-weight:600}
+.cc-badge{margin-left:auto;background:var(--green-700);color:var(--white);font-size:0.6rem;font-weight:800;padding:1px 5px;border-radius:8px}
+.cc-badge-gold{margin-left:auto;background:var(--uber-gold);color:#1C1C1C;font-size:0.6rem;font-weight:800;padding:1px 5px;border-radius:8px}
+.cc-badge-grey{margin-left:auto;background:var(--ink-400);color:var(--white);font-size:0.6rem;font-weight:800;padding:1px 5px;border-radius:8px}
+.cc-badge-red{margin-left:auto;background:#DC2626;color:var(--white);font-size:0.6rem;font-weight:800;padding:1px 5px;border-radius:8px}
+.cc-sep{height:1px;background:var(--ink-200);margin:8px 0}
+.cc-main{padding:14px;display:flex;flex-direction:column;gap:10px}
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi{background:var(--ink-50);border:1px solid var(--ink-200);border-radius:10px;padding:11px 12px;text-align:center}
+.kpi-val{font-size:1.25rem;font-weight:700;color:var(--green-700);line-height:1;margin-bottom:2px}
+.kpi-lbl{font-size:0.63rem;color:var(--ink-400);font-weight:500}
+.kpi-delta{font-size:0.6rem;color:#16A34A;font-weight:700;margin-top:2px}
+
+.persona-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.persona-card{border-radius:var(--radius);padding:10px 12px;border:1px solid}
+.persona-driver{background:rgba(245,166,35,0.07);border-color:rgba(245,166,35,0.25)}
+.persona-rider{background:var(--green-50);border-color:var(--green-100)}
+.persona-label{font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px}
+.persona-driver .persona-label{color:#B45309}
+.persona-rider .persona-label{color:var(--green-700)}
+.persona-text{font-size:0.72rem;font-weight:600;color:var(--ink);margin-bottom:3px;line-height:1.3}
+.persona-meta{font-size:0.62rem;color:var(--ink-400)}
+.persona-tag{display:inline-block;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:4px;margin-top:5px}
+.tag-driver{background:rgba(245,166,35,0.15);color:#92400E}
+.tag-rider{background:var(--green-100);color:var(--green-700)}
+.tag-safety{background:#FEF2F2;color:#DC2626}
+.tag-ai{background:var(--green-100);color:var(--green-700)}
+
+.city-strip{background:linear-gradient(135deg,var(--ink-800) 0%,#0F2027 100%);border:1px solid var(--mint-border);border-radius:var(--radius);padding:11px 13px}
+.cs-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.cs-title{font-size:0.75rem;font-weight:700;color:var(--white)}
+.cs-sub{font-size:0.62rem;color:rgba(255,255,255,0.4)}
+.cs-cities{display:flex;gap:6px;flex-wrap:wrap}
+.cs-city{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 9px;font-size:0.65rem;color:rgba(255,255,255,0.65);font-weight:600}
+.cs-city-dot{width:5px;height:5px;border-radius:50%}
+.dot-green{background:var(--mint)}.dot-gold{background:var(--uber-gold)}.dot-grey{background:rgba(255,255,255,0.3)}
+
+.trust{border-top:1px solid var(--ink-200);border-bottom:1px solid var(--ink-200);padding:28px 40px}
+.trust-inner{max-width:var(--max);margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:16px}
+.trust-lbl{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;color:var(--ink-400)}
+.trust-logos{display:flex;align-items:center;gap:48px;flex-wrap:wrap;justify-content:center}
+.trust-logo{font-size:1.05rem;font-weight:800;color:var(--ink-200);letter-spacing:-0.02em;transition:color .2s}
+.trust-logo:hover{color:var(--ink-400)}
+
+.section{padding:88px 40px}.section-inner{max-width:var(--max);margin:0 auto}.section-alt{background:var(--ink-50)}
+.eyebrow{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;color:var(--green-700);margin-bottom:12px}
+h2.section-h{font-family:var(--font-serif);font-size:2.4rem;line-height:1.15;color:var(--ink);margin-bottom:16px;font-weight:400}
+h2.section-h em{font-style:italic;color:var(--green-700)}
+.section-desc{font-size:1.0625rem;line-height:1.72;color:var(--ink-400);max-width:560px;margin-bottom:52px}
+.challenge-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.ch-card{background:var(--white);border:1px solid var(--ink-200);border-radius:var(--radius-lg);padding:30px;transition:all .2s}
+.ch-card:hover{border-color:var(--green-400);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.ch-icon{width:44px;height:44px;border-radius:10px;background:var(--ink-100);margin-bottom:18px;display:flex;align-items:center;justify-content:center;font-size:1.3rem}
+.ch-card h3{font-size:1rem;font-weight:700;margin-bottom:10px;color:var(--ink)}
+.ch-card p{font-size:0.875rem;line-height:1.68;color:var(--ink-400)}
+
+.freddy-section{background:var(--ink-800);padding:88px 40px;color:var(--white);position:relative;overflow:hidden}
+.freddy-section::before{content:'';position:absolute;top:-120px;right:-120px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,195,137,.06) 0%,transparent 70%);pointer-events:none}
+.freddy-section::after{content:'';position:absolute;bottom:-80px;left:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(1,119,50,.08) 0%,transparent 70%);pointer-events:none}
+.freddy-inner{max-width:var(--max);margin:0 auto;position:relative;z-index:1}
+.freddy-header{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;margin-bottom:56px}
+.freddy-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--mint-dim);border:1px solid var(--mint-border);color:var(--mint);font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:5px 12px 5px 8px;border-radius:100px;margin-bottom:20px}
+h2.freddy-h{font-family:var(--font-serif);font-size:2.4rem;line-height:1.15;margin-bottom:20px;color:var(--white);font-weight:400}
+h2.freddy-h em{font-style:italic;color:var(--mint)}
+.freddy-body{font-size:1rem;line-height:1.75;color:rgba(255,255,255,0.6);margin-bottom:22px}
+.freddy-warmth{background:var(--mint-dim);border:1px solid var(--mint-border);border-radius:var(--radius);padding:20px 22px;font-size:0.9rem;line-height:1.65;color:rgba(255,255,255,0.8);font-style:italic}
+.freddy-warmth strong{color:var(--mint);font-style:normal;font-weight:700}
+.freddy-demo{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:22px;display:flex;flex-direction:column;gap:14px}
+.demo-head{display:flex;align-items:center;justify-content:space-between}
+.demo-title{font-size:0.875rem;font-weight:700;color:var(--white)}
+.demo-badge{display:flex;align-items:center;gap:5px;background:var(--mint-dim);border:1px solid var(--mint-border);color:var(--mint);font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:20px}
+.badge-dot{width:5px;height:5px;border-radius:50%;background:var(--mint);animation:pulse 2s infinite}
+.demo-user{background:rgba(255,255,255,0.05);border-radius:10px;padding:10px 12px;font-size:0.78rem;color:rgba(255,255,255,0.6);display:flex;align-items:center;gap:10px}
+.user-dot{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;color:var(--white)}
+.user-name{font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.85)}
+.user-plan{font-size:0.65rem;color:var(--uber-gold)}
+.chat-wrap{display:flex;flex-direction:column;gap:8px}
+.bubble{padding:10px 13px;border-radius:10px;font-size:0.82rem;line-height:1.5;max-width:88%}
+.bubble-user{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.8);align-self:flex-end;border-bottom-right-radius:3px}
+.bubble-freddy{background:rgba(0,195,137,0.1);border:1px solid rgba(0,195,137,0.2);color:rgba(255,255,255,0.85);align-self:flex-start;border-bottom-left-radius:3px}
+.bubble-label{font-size:0.63rem;font-weight:700;color:var(--mint);margin-bottom:4px}
+.demo-resolved{background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.2);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:8px;font-size:0.78rem;color:rgba(255,255,255,0.7)}
+.freddy-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.pillar{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:28px;transition:all .2s}
+.pillar:hover{background:rgba(0,195,137,0.06);border-color:var(--mint-border)}
+.pillar-ico{width:44px;height:44px;border-radius:10px;background:var(--mint-dim);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:18px}
+.pillar h3{font-size:1rem;font-weight:700;color:var(--white);margin-bottom:10px}
+.pillar p{font-size:0.875rem;color:rgba(255,255,255,0.5);line-height:1.68}
+.pillar-chip{display:inline-block;margin-top:16px;background:var(--mint-dim);border:1px solid var(--mint-border);color:var(--mint);font-size:0.68rem;font-weight:700;padding:3px 9px;border-radius:4px}
+
+.caps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.cap{background:var(--white);border:1px solid var(--ink-200);border-radius:var(--radius-lg);padding:28px;transition:all .2s}
+.cap:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.cap-ico{width:44px;height:44px;border-radius:10px;background:var(--green-50);border:1px solid var(--green-100);display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-bottom:18px}
+.cap h3{font-size:1rem;font-weight:700;margin-bottom:10px;color:var(--ink)}
+.cap p{font-size:0.875rem;line-height:1.68;color:var(--ink-400)}
+.cap-tag{display:inline-flex;align-items:center;gap:4px;margin-top:16px;background:var(--green-100);color:var(--green-700);font-size:0.68rem;font-weight:700;padding:3px 9px;border-radius:4px}
+
+.roi-strip{background:var(--ink-800);padding:56px 40px;color:var(--white)}
+.roi-inner{max-width:var(--max);margin:0 auto}
+.roi-eyebrow{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;color:rgba(255,255,255,0.45);margin-bottom:10px;text-align:center}
+.roi-headline{font-family:var(--font-serif);font-size:1.6rem;line-height:1.2;color:var(--white);text-align:center;margin-bottom:36px;font-weight:400}
+.roi-headline em{font-style:italic;color:var(--mint)}
+.roi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.roi-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:24px 18px;text-align:center}
+.roi-val{font-family:var(--font-serif);font-size:2.4rem;color:var(--mint);line-height:1;margin-bottom:8px}
+.roi-val sup{font-size:1.1rem;vertical-align:super}
+.roi-val sub{font-size:1.1rem}
+.roi-lbl{font-size:0.8rem;color:rgba(255,255,255,0.55);line-height:1.4}
+.roi-source{text-align:center;margin-top:20px;font-size:0.72rem;color:rgba(255,255,255,0.3);font-style:italic}
+
+.proof-section{padding:88px 40px}
+.proof-inner{max-width:var(--max);margin:0 auto}
+.proof-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:64px;align-items:start;margin-top:52px}
+.quote-block{background:var(--ink-50);border:1px solid var(--ink-200);border-radius:var(--radius-xl);padding:36px}
+.q-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.q-badge{background:var(--green-100);color:var(--green-700);font-size:0.7rem;font-weight:700;padding:4px 10px;border-radius:20px}
+.q-text{font-family:var(--font-serif);font-size:1.3rem;line-height:1.55;color:var(--ink);margin-bottom:24px;font-weight:400}
+.q-text em{font-style:italic;color:var(--green-700)}
+.q-attr{display:flex;align-items:center;gap:12px}
+.q-avatar{width:44px;height:44px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#1C1C1C,#374151);display:flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:800;color:var(--white)}
+.q-name{font-weight:700;font-size:0.9rem;color:var(--ink)}
+.q-role{font-size:0.8rem;color:var(--ink-400);margin-top:2px}
+.proof-cards{display:flex;flex-direction:column;gap:14px}
+.pcard{background:var(--white);border:1px solid var(--ink-200);border-radius:var(--radius-lg);padding:20px 22px;display:flex;align-items:center;gap:16px;transition:all .2s}
+.pcard:hover{box-shadow:var(--shadow-md);border-color:var(--green-400)}
+.pcard-logo{width:52px;height:52px;border-radius:10px;flex-shrink:0;background:var(--ink-50);border:1px solid var(--ink-200);display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;color:var(--ink-600);text-align:center;line-height:1.2}
+.pcard-body{flex:1}
+.pcard-name{font-weight:700;font-size:0.875rem;color:var(--ink);margin-bottom:3px}
+.pcard-desc{font-size:0.8rem;color:var(--ink-400);line-height:1.45}
+.pcard-stat{font-family:var(--font-serif);font-size:1.5rem;font-weight:400;color:var(--green-700);white-space:nowrap;text-align:right;flex-shrink:0}
+.pcard-stat-lbl{font-size:0.65rem;color:var(--ink-400);font-family:var(--font-sans);margin-top:1px;white-space:nowrap}
+
+.cta-section{background:var(--ink-800);padding:88px 40px;color:var(--white);text-align:center;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:400px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,195,137,.06) 0%,transparent 70%);pointer-events:none}
+.cta-inner{max-width:600px;margin:0 auto;position:relative;z-index:1}
+h2.cta-h{font-family:var(--font-serif);font-size:2.4rem;line-height:1.15;color:var(--white);margin-bottom:16px;font-weight:400}
+h2.cta-h em{font-style:italic;color:var(--mint)}
+.cta-sub{font-size:1rem;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:40px}
+.cta-form{display:flex;gap:10px;max-width:440px;margin:0 auto 14px}
+.cta-input{flex:1;padding:13px 16px;border-radius:10px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);color:var(--white);font-size:0.9rem;font-family:var(--font-sans);outline:none}
+.cta-input::placeholder{color:rgba(255,255,255,0.3)}
+.cta-input:focus{border-color:var(--mint);box-shadow:0 0 0 3px var(--mint-dim)}
+.cta-note{font-size:0.78rem;color:rgba(255,255,255,0.3)}
+.cta-options{display:flex;gap:24px;justify-content:center;margin-top:32px}
+.cta-opt{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-lg);padding:22px 24px;text-align:left;flex:1;max-width:200px;transition:all .2s}
+.cta-opt:hover{border-color:var(--mint-border);background:var(--mint-dim)}
+.cta-opt-ico{font-size:1.4rem;margin-bottom:10px}
+.cta-opt-title{font-size:0.875rem;font-weight:700;color:var(--white);margin-bottom:5px}
+.cta-opt-desc{font-size:0.78rem;color:rgba(255,255,255,0.45);line-height:1.4}
+
+footer{border-top:1px solid var(--ink-200);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.footer-left{display:flex;align-items:center;gap:16px}
+.footer-logo img{height:20px;opacity:0.7}
+.footer-copy{font-size:0.78rem;color:var(--ink-400)}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:0.78rem;color:var(--ink-400);transition:color .15s}
+.footer-links a:hover{color:var(--green-700)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-left>*{animation:fadeUp .55s ease both}
+.hero-left>*:nth-child(1){animation-delay:.05s}
+.hero-left>*:nth-child(2){animation-delay:.12s}
+.hero-left>*:nth-child(3){animation-delay:.19s}
+.hero-left>*:nth-child(4){animation-delay:.26s}
+.hero-left>*:nth-child(5){animation-delay:.33s}
+.hero-visual{animation:fadeUp .6s .2s ease both}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="https://www.freshworks.com/freshdesk/omni/" class="fw-logo">
+      <img src="https://dam.freshworks.com/m/1d230ee78c07681a/original/headerLogoLight.webp" alt="Freshworks" onerror="this.style.display='none'" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Product</a></li>
+      <li><a href="#">Solutions</a></li>
+      <li><a href="#">Customers</a></li>
+      <li><a href="#">Pricing</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="https://login.freshworks.com/email-login/" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="https://www.freshworks.com/freshdesk/omni/demo-request/" class="btn btn-green btn-sm">Book a demo</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        Freshdesk Omni · Built for Uber
+      </div>
+      <h1 class="hero-h">
+        One platform for drivers, riders,<br>and every city <em>in between</em>
+      </h1>
+      <p class="hero-sub">
+        Uber operates in 72 countries. A driver dispute in Lagos, a rider safety report in London, and an Uber Eats delivery complaint in Tokyo can all land in the same queue at the same time. Freshdesk Omni gives your CX team one command center, with the context and routing intelligence to handle all three correctly.
+      </p>
+      <div class="hero-ctas">
+        <a href="https://www.freshworks.com/freshdesk/omni/demo-request/" class="btn btn-green btn-lg">Book a Demo</a>
+        <a href="https://www.freshworks.com/freshdesk/omni/signup/" class="btn btn-outline-green btn-lg">Try it free</a>
+      </div>
+      <div class="hero-proof">
+        <div class="proof-avatars">
+          <div class="proof-avatar pa-1">K</div>
+          <div class="proof-avatar pa-2">P</div>
+          <div class="proof-avatar pa-3">N</div>
+          <div class="proof-avatar pa-4">D</div>
+        </div>
+        <span>Trusted by <strong>75,000+ businesses</strong> including Klarna, PhonePe and Databricks</span>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-float-1">
+        <span>🌍</span>
+        72 countries · <span class="float-gold">single workspace</span>
+      </div>
+
+      <div class="cc">
+        <div class="cc-bar">
+          <div class="cc-dots"><div class="cd cd-r"></div><div class="cd cd-y"></div><div class="cd cd-g"></div></div>
+          <span class="cc-label">FRESHDESK COMMAND CENTER</span>
+          <div class="cc-live"><span class="cc-live-dot"></span>Live</div>
+        </div>
+        <div class="cc-layout">
+          <div class="cc-sidebar">
+            <div class="cc-nav on">📥 All Tickets <span class="cc-badge">8,204</span></div>
+            <div class="cc-nav">🤖 Freddy AI</div>
+            <div class="cc-nav">🚗 Driver issues <span class="cc-badge-gold">1,847</span></div>
+            <div class="cc-nav">👤 Rider issues <span class="cc-badge-grey">5,912</span></div>
+            <div class="cc-nav">🚨 Safety reports <span class="cc-badge-red">38</span></div>
+            <div class="cc-sep"></div>
+            <div class="cc-nav">🍔 Uber Eats</div>
+            <div class="cc-nav">🌍 72 countries</div>
+            <div class="cc-nav">💬 40+ languages</div>
+          </div>
+          <div class="cc-main">
+            <div class="kpi-row">
+              <div class="kpi">
+                <div class="kpi-val">81%</div>
+                <div class="kpi-lbl">Freddy AI resolved</div>
+                <div class="kpi-delta">up from 9%</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-val">100%</div>
+                <div class="kpi-lbl">Safety SLA met</div>
+                <div class="kpi-delta">38 escalated, 0 missed</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-val">3m</div>
+                <div class="kpi-lbl">Avg resolution time</div>
+                <div class="kpi-delta">down 68%</div>
+              </div>
+            </div>
+
+            <div class="persona-row">
+              <div class="persona-card persona-driver">
+                <div class="persona-label">Driver</div>
+                <div class="persona-text">Earnings not updated after 6 completed trips</div>
+                <div class="persona-meta">💬 In-app chat · Lagos · 4 min ago</div>
+                <span class="persona-tag tag-driver">Pay dispute</span>
+              </div>
+              <div class="persona-card persona-rider">
+                <div class="persona-label">Rider</div>
+                <div class="persona-text">Driver took wrong route, charged extra</div>
+                <div class="persona-meta">📧 Email · London · 2 min ago</div>
+                <span class="persona-tag tag-rider">Fare dispute</span>
+              </div>
+            </div>
+
+            <div class="city-strip">
+              <div class="cs-head">
+                <div>
+                  <div class="cs-title">Active support regions right now</div>
+                  <div class="cs-sub">One workspace, every market</div>
+                </div>
+              </div>
+              <div class="cs-cities">
+                <div class="cs-city"><span class="cs-city-dot dot-green"></span>New York</div>
+                <div class="cs-city"><span class="cs-city-dot dot-green"></span>London</div>
+                <div class="cs-city"><span class="cs-city-dot dot-gold"></span>Lagos</div>
+                <div class="cs-city"><span class="cs-city-dot dot-green"></span>Tokyo</div>
+                <div class="cs-city"><span class="cs-city-dot dot-green"></span>Sao Paulo</div>
+                <div class="cs-city"><span class="cs-city-dot dot-gold"></span>Mumbai</div>
+                <div class="cs-city"><span class="cs-city-dot dot-green"></span>Sydney</div>
+                <div class="cs-city"><span class="cs-city-dot dot-grey"></span>+65 more</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-float-2">
+        <span>🚨</span>
+        Safety reports get <span class="float-green">priority escalation</span> instantly
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trust">
+  <div class="trust-inner">
+    <p class="trust-lbl">Trusted by 75,000+ businesses worldwide, including</p>
+    <div class="trust-logos">
+      <span class="trust-logo">Klarna</span>
+      <span class="trust-logo">PhonePe</span>
+      <span class="trust-logo">Databricks</span>
+      <span class="trust-logo">7-Eleven</span>
+      <span class="trust-logo">Carrefour</span>
+      <span class="trust-logo">McLaren F1</span>
+    </div>
+  </div>
+</div>
+
+<section class="section">
+  <div class="section-inner">
+    <p class="eyebrow">The Challenge</p>
+    <h2 class="section-h">When every ticket is a different person,<br>product, <em>country, and urgency level</em></h2>
+    <p class="section-desc">Uber is not one product. It is rides, deliveries, freight, and business travel, in 72 countries, with two customer types per trip and a safety obligation that demands instant escalation every time.</p>
+    <div class="challenge-grid">
+      <div class="ch-card">
+        <div class="ch-icon">🔄</div>
+        <h3>Drivers and riders have opposite versions of the same incident</h3>
+        <p>A fare dispute looks completely different from the driver's side than the rider's. A payment complaint might be a rider unhappy with the charge or a driver who has not been paid. Without unified context, agents are resolving half a story and making decisions on incomplete information.</p>
+      </div>
+      <div class="ch-card">
+        <div class="ch-icon">🚨</div>
+        <h3>Safety reports cannot wait in a general queue</h3>
+        <p>A rider reporting a safety concern mid-trip is a different category of urgency than a billing question. If it lands in the same inbox with no priority routing, the consequences are severe. Safety escalation has to be automatic, immediate, and tracked to resolution without exception.</p>
+      </div>
+      <div class="ch-card">
+        <div class="ch-icon">🌍</div>
+        <h3>72 countries means 72 different regulatory and cultural contexts</h3>
+        <p>What Uber can offer a rider in the US differs from what it can offer in Brazil, India, or Germany. Dispute resolution processes, refund policies, and data handling requirements vary by market. Agents need city-level context on every ticket, not a generic global playbook.</p>
+      </div>
+      <div class="ch-card">
+        <div class="ch-icon">🍔</div>
+        <h3>Rides, Eats, and Business are three different products in one queue</h3>
+        <p>An Uber Eats complaint about a missing item, a ride dispute about a cancelled trip, and an Uber for Business expense query are completely different workflows. Siloed queues mean duplicated infrastructure. A shared queue with no routing intelligence means every agent handles everything badly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="freddy-section">
+  <div class="freddy-inner">
+    <div class="freddy-header">
+      <div>
+        <div class="freddy-eyebrow"><span class="badge-dot"></span>Meet Freddy AI</div>
+        <h2 class="freddy-h">AI that knows whether it is<br>a <em>driver, a rider, or a safety report</em></h2>
+        <p class="freddy-body">
+          Most AI support tools route tickets based on keywords. Freddy AI routes based on context. When a ticket comes in, Freddy reads the account type, the product line, the market, the trip history, and the issue nature before a single agent sees it.
+        </p>
+        <p class="freddy-body">
+          A driver pay dispute goes to the earnings resolution team with the full trip log already loaded. A rider safety report bypasses the queue entirely and escalates to the safety team in seconds. An Uber Eats missing item complaint goes to the restaurant resolution flow with the order confirmed. Right ticket, right person, right context, every time.
+        </p>
+        <div class="freddy-warmth">
+          <strong>People-first AI means drivers feel heard about their earnings, riders feel safe reporting incidents, and the agent has everything they need to resolve it fast.</strong> That is what trust in a two-sided marketplace looks like.
+        </div>
+      </div>
+
+      <div class="freddy-demo">
+        <div class="demo-head">
+          <div class="demo-title">Freddy AI: fare dispute resolved with full context</div>
+          <div class="demo-badge"><span class="badge-dot"></span>Live</div>
+        </div>
+        <div class="demo-user">
+          <div class="user-dot" style="background:linear-gradient(135deg,#1C1C1C,#374151)">AK</div>
+          <div>
+            <div class="user-name">Amara K.</div>
+            <div class="user-plan">Uber Rider · London · 94 trips · Platinum</div>
+          </div>
+          <div style="margin-left:auto;font-size:0.65rem;color:rgba(255,255,255,0.4)">Chat</div>
+        </div>
+        <div class="chat-wrap">
+          <div class="bubble bubble-user">
+            My driver took a completely different route to avoid traffic and I was charged 40% more than the estimate. I do not think this is right.
+          </div>
+          <div class="bubble bubble-freddy">
+            <div class="bubble-label">Freddy AI · Uber Support</div>
+            Amara, I can see your trip from Shoreditch to Heathrow on Tuesday. The route taken added 8 km versus the estimated route. Our policy covers fare adjustments when the deviation is not due to passenger request. I have issued a refund of GBP 14.20 to your payment card ending in 4821. You will see it within 3 to 5 business days.
+          </div>
+          <div class="bubble bubble-user">That was fast. Thank you, really appreciate it.</div>
+        </div>
+        <div class="demo-resolved">
+          <span>✅</span>
+          <div>Fare adjusted · Refund issued · <strong style="color:#86EFAC">Resolved in 67 seconds</strong> · No agent needed</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="freddy-pillars">
+      <div class="pillar">
+        <div class="pillar-ico">🤖</div>
+        <h3>Freddy AI Agent</h3>
+        <p>Handles fare disputes, refund requests, trip history lookups, driver pay queries, and Eats delivery issues automatically. Freddy resolves up to 80% of routine tickets without an agent, in 40+ languages, around the clock, across all 72 markets.</p>
+        <span class="pillar-chip">Up to 80% auto-resolution</span>
+      </div>
+      <div class="pillar">
+        <div class="pillar-ico">💡</div>
+        <h3>Freddy AI Copilot</h3>
+        <p>For complex escalations, Freddy Copilot loads the complete trip log, driver rating history, rider tenure, market-specific policy, and previous interactions before the agent even reads the first line. Faster resolution, better decisions, less tab-switching.</p>
+        <span class="pillar-chip">60% agent productivity uplift</span>
+      </div>
+      <div class="pillar">
+        <div class="pillar-ico">📊</div>
+        <h3>Freddy AI Insights</h3>
+        <p>Which cities generate the most fare disputes? Which driver cohorts have the highest churn-correlated support volume? Which Eats restaurant partners drive the most complaints? Freddy Insights turns 8,000 daily tickets into a strategic operations map.</p>
+        <span class="pillar-chip">Operational intelligence</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="section-inner">
+    <p class="eyebrow">Freshdesk Omni Capabilities</p>
+    <h2 class="section-h">Built for the complexity of<br><em>two customers per trip</em>, 72 countries</h2>
+    <p class="section-desc">Every Uber trip involves a driver and a rider. Every city has its own rules. Every product line has its own resolution workflow. Freshdesk Omni handles all of it from one place.</p>
+    <div class="caps-grid">
+      <div class="cap">
+        <div class="cap-ico">🔄</div>
+        <h3>Dual-Persona Unified Inbox</h3>
+        <p>Driver and rider tickets for the same trip are automatically linked. Agents see both sides of a dispute in one view, with the full trip log attached. No toggling between systems. No requesting information the platform already has.</p>
+        <span class="cap-tag">Both sides, one view</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">🚨</div>
+        <h3>Safety Report Priority Routing</h3>
+        <p>Safety-related tickets bypass the general queue and route to the safety team immediately with a full incident log. SLA compliance is tracked and reported automatically. Zero tolerance for missed safety escalations, built into the platform.</p>
+        <span class="cap-tag">Zero missed escalations</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">🌍</div>
+        <h3>City-Level Policy Context</h3>
+        <p>Agents handling a ticket from Lagos see the Nigeria fare policy and refund limits. Agents in London see UK consumer rights requirements. Local regulatory and policy context is surfaced automatically, so agents always make the right call for the right market.</p>
+        <span class="cap-tag">72 market configurations</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">🍔</div>
+        <h3>Multi-Product Workflow Routing</h3>
+        <p>Rides, Eats, Freight, and Business tickets each follow their own resolution workflow automatically. The right agent with the right training sees the right ticket. No generalist handling specialist issues. No specialist idle while generalist issues pile up.</p>
+        <span class="cap-tag">Product-specific routing</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">💬</div>
+        <h3>Omnichannel In 40+ Languages</h3>
+        <p>In-app chat, email, phone, WhatsApp, and social all flow into one inbox. Language is detected automatically and tickets are routed to agents with matching language skills. A driver in Nairobi gets Swahili support. A rider in Tokyo gets Japanese.</p>
+        <span class="cap-tag">40+ languages auto-detected</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">⚡</div>
+        <h3>Automated Fare and Refund Workflows</h3>
+        <p>50+ prebuilt agentic workflows cover fare adjustments, refund processing, cancellation fee waivers, and driver pay corrections. Freddy handles routine cases end-to-end. Agents focus on the disputes that genuinely need human judgment.</p>
+        <span class="cap-tag">50+ prebuilt workflows</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="roi-strip">
+  <div class="roi-inner">
+    <p class="roi-eyebrow">Forrester Total Economic Impact Study · Freshdesk Omni · 2024</p>
+    <h2 class="roi-headline">The ROI of unifying your support operation, <em>proven by Forrester</em></h2>
+    <div class="roi-grid">
+      <div class="roi-card">
+        <div class="roi-val">225<sup>%</sup></div>
+        <div class="roi-lbl">ROI over three years from Freshdesk Omni</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-val">$1.3<sub>M</sub></div>
+        <div class="roi-lbl">Cost savings by shifting to self-service and lower-cost channels</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-val">30<sup>%</sup></div>
+        <div class="roi-lbl">Reduction in average handling time across the support team</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-val">4<sup>x</sup></div>
+        <div class="roi-lbl">Increase in issues resolved via self-service without agent involvement</div>
+      </div>
+    </div>
+    <p class="roi-source">*Based on a composite organization over three years. Source: The Total Economic Impact of Freshdesk Omni, Forrester Consulting, 2024</p>
+  </div>
+</div>
+
+<section class="proof-section">
+  <div class="proof-inner">
+    <p class="eyebrow">High-volume, high-stakes platforms trust Freshworks</p>
+    <h2 class="section-h">Platforms that move fast<br><em>without dropping the support ball</em></h2>
+    <div class="proof-grid">
+      <div class="quote-block">
+        <div class="q-top">
+          <span class="q-badge">PhonePe · Freshworks customer</span>
+          <span style="font-size:1.5rem;color:var(--green-700)">"</span>
+        </div>
+        <p class="q-text">
+          Decisions at PhonePe are taken keeping in mind the consumers and what the right choice is for them. <em>We are constantly trying to see where we can add value and enrich their existing relationship with us.</em> Freshworks is the partner that matches that ethos.
+        </p>
+        <div class="q-attr">
+          <div class="q-avatar">VG</div>
+          <div>
+            <div class="q-name">Vishal Gupta</div>
+            <div class="q-role">Head of Product, PhonePe · 300M users · 1.5B monthly transactions</div>
+          </div>
+        </div>
+      </div>
+      <div class="proof-cards">
+        <div class="pcard">
+          <div class="pcard-logo">Phone<br>Pe</div>
+          <div class="pcard-body">
+            <div class="pcard-name">PhonePe: 300M users, 1.5B monthly transactions</div>
+            <div class="pcard-desc">Freddy AI auto-resolves 80% of queries across 850+ request types. Payment volumes double every 3 to 5 months. Freshworks scales with them.</div>
+          </div>
+          <div>
+            <div class="pcard-stat">80%</div>
+            <div class="pcard-stat-lbl">auto-resolved by Freddy</div>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-logo">Klar<br>na</div>
+          <div class="pcard-body">
+            <div class="pcard-name">Klarna: 80M customers, 1M daily transactions</div>
+            <div class="pcard-desc">60-second first response SLA met consistently. Phone support dropped from 63% to 32% of contact volumes as Freddy absorbed the load.</div>
+          </div>
+          <div>
+            <div class="pcard-stat">60s</div>
+            <div class="pcard-stat-lbl">first response SLA</div>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-logo">Data<br>bricks</div>
+          <div class="pcard-body">
+            <div class="pcard-name">Databricks: scaled from 50 to 230 agents globally</div>
+            <div class="pcard-desc">Expanded from IT to 8 additional departments in 3 years. 96% CSAT. 23% self-service deflection. Replaced Zendesk and ServiceNow.</div>
+          </div>
+          <div>
+            <div class="pcard-stat">96%</div>
+            <div class="pcard-stat-lbl">CSAT score</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h">See Freshdesk Omni<br>built <em>for Uber</em></h2>
+    <p class="cta-sub">
+      We will show you exactly how dual-persona routing, safety escalation workflows, city-level policy context, and Freddy AI resolution work in a 45-minute session built around Uber's specific support model.
+    </p>
+    <div class="cta-form">
+      <input class="cta-input" type="email" placeholder="you@uber.com" />
+      <a href="https://www.freshworks.com/freshdesk/omni/demo-request/" class="btn btn-green btn-lg">Book a Demo</a>
+    </div>
+    <p class="cta-note">No credit card required · Free trial available · Set up in minutes</p>
+    <div class="cta-options">
+      <div class="cta-opt"><div class="cta-opt-ico">🎯</div><div class="cta-opt-title">Free Trial</div><div class="cta-opt-desc">Try it free, no card needed</div></div>
+      <div class="cta-opt"><div class="cta-opt-ico">📋</div><div class="cta-opt-title">Product Tour</div><div class="cta-opt-desc">Explore at your own pace</div></div>
+      <div class="cta-opt"><div class="cta-opt-ico">📞</div><div class="cta-opt-title">Talk to Sales</div><div class="cta-opt-desc">sales@freshworks.com</div></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo">
+      <img src="https://dam.freshworks.com/m/329aae6a552dcfa8/original/freshworks-logoBlack.svg" alt="Freshworks" onerror="this.style.display='none'" />
+    </div>
+    <span class="footer-copy">© 2025 Freshworks Inc. All Rights Reserved</span>
+  </div>
+  <div class="footer-links">
+    <a href="https://www.freshworks.com/privacy/">Privacy Notice</a>
+    <a href="https://www.freshworks.com/site-terms/">Site Terms</a>
+    <a href="https://www.freshworks.com/security/">Security</a>
+    <a href="https://www.freshworks.com/contact/">Contact Freshworks</a>
+  </div>
+</footer>
+
+</body>
+</html>
