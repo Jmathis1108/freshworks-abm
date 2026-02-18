@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freshdesk Omni for Airbnb: Customer service that puts people first</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green-900: #014D22;
+  --green-700: #017732;
+  --green-500: #1EA95C;
+  --green-400: #3DC874;
+  --green-100: #D6F5E4;
+  --green-50:  #F0FBF5;
+  --ink:       #0D1117;
+  --ink-800:   #1C2333;
+  --ink-600:   #374151;
+  --ink-400:   #6B7280;
+  --ink-200:   #D1D5DB;
+  --ink-100:   #F3F4F6;
+  --ink-50:    #F9FAFB;
+  --white:     #FFFFFF;
+  --mint:      #00C389;
+  --mint-dim:  rgba(0,195,137,0.12);
+  --mint-border: rgba(0,195,137,0.25);
+  --airbnb:    #FF385C;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.06);
+  --shadow-xl: 0 32px 64px rgba(0,0,0,0.12);
+  --font-sans: 'DM Sans', -apple-system, sans-serif;
+  --font-serif: 'DM Serif Display', Georgia, serif;
+  --max: 1200px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body { font-family: var(--font-sans); background: var(--white); color: var(--ink); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+
+/* NAV */
+.nav {
+  position: sticky; top: 0; z-index: 300;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--ink-200);
+}
+.nav-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 68px;
+}
+.fw-logo img { height: 28px; width: auto; }
+.fw-logo-fallback {
+  display: none; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 1.1rem; color: var(--ink);
+}
+.nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+.nav-links a {
+  padding: 7px 14px; border-radius: 8px;
+  font-size: 0.875rem; font-weight: 500; color: var(--ink-600);
+  transition: background 0.15s, color 0.15s;
+}
+.nav-links a:hover { background: var(--ink-100); color: var(--ink); }
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  font-family: var(--font-sans); font-size: 0.875rem; font-weight: 600;
+  border: none; cursor: pointer; border-radius: 9px;
+  transition: all 0.18s; white-space: nowrap;
+}
+.btn-sm  { padding: 8px 18px; }
+.btn-lg  { padding: 14px 30px; font-size: 0.95rem; border-radius: 10px; }
+.btn-ghost {
+  background: transparent; color: var(--ink-600);
+  border: 1px solid var(--ink-200);
+}
+.btn-ghost:hover { background: var(--ink-100); border-color: var(--ink-400); color: var(--ink); }
+.btn-green {
+  background: var(--green-700); color: var(--white);
+  box-shadow: 0 1px 3px rgba(1,119,50,0.25);
+}
+.btn-green:hover {
+  background: var(--green-900);
+  box-shadow: 0 4px 16px rgba(1,119,50,0.4);
+  transform: translateY(-1px);
+}
+.btn-outline-green {
+  background: transparent; color: var(--green-700);
+  border: 1.5px solid var(--green-700);
+}
+.btn-outline-green:hover { background: var(--green-50); transform: translateY(-1px); }
+
+/* HERO */
+.hero {
+  background: linear-gradient(180deg, var(--ink-50) 0%, var(--white) 60%);
+  padding: 80px 40px 0;
+  overflow: hidden; position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(1,119,50,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(1,119,50,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.hero-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: flex-start; position: relative;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green-100); color: var(--green-700);
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 5px 12px 5px 8px;
+  border-radius: 100px; margin-bottom: 22px;
+}
+.hero-eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-700); animation: pulse 2.5s ease infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(0.8); } }
+h1.hero-h {
+  font-family: var(--font-serif);
+  font-size: 3rem; line-height: 1.1; color: var(--ink);
+  margin-bottom: 22px; font-weight: 400;
+}
+h1.hero-h em { font-style: italic; color: var(--green-700); }
+.hero-sub {
+  font-size: 1.05rem; line-height: 1.72; color: var(--ink-400);
+  max-width: 480px; margin-bottom: 36px;
+}
+.hero-ctas { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 36px; }
+.hero-proof {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.82rem; color: var(--ink-400);
+}
+.proof-avatars { display: flex; }
+.proof-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--white); margin-left: -8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.62rem; font-weight: 700; color: var(--white);
+}
+.proof-avatar:first-child { margin-left: 0; }
+.pa-1 { background: linear-gradient(135deg, #0891B2, #06B6D4); }
+.pa-2 { background: linear-gradient(135deg, var(--airbnb), #E31C5F); }
+.pa-3 { background: linear-gradient(135deg, var(--green-700), var(--mint)); }
+.pa-4 { background: linear-gradient(135deg, #7C3AED, #4F46E5); }
+
+/* HERO VISUAL: dual persona cards */
+.hero-visual { position: relative; }
+.hero-float-1 {
+  position: absolute; top: -12px; right: -20px; z-index: 10;
+  background: var(--white); border: 1px solid var(--ink-200);
+  border-radius: var(--radius); padding: 10px 14px; box-shadow: var(--shadow-md);
+  display: flex; align-items: center; gap: 9px;
+  font-size: 0.8rem; font-weight: 600; color: var(--ink); white-space: nowrap;
+}
+.hero-float-2 {
+  position: absolute; bottom: 48px; left: -24px; z-index: 10;
+  background: var(--ink-800); border-radius: var(--radius);
+  padding: 10px 14px; box-shadow: var(--shadow-md);
+  display: flex; align-items: center; gap: 9px;
+  font-size: 0.78rem; font-weight: 600; color: var(--white); white-space: nowrap;
+}
+.float-green { color: var(--mint); }
+
+/* Command Center UI */
+.cc {
+  background: var(--white); border: 1px solid var(--ink-200);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: var(--shadow-xl); overflow: hidden;
+}
+.cc-bar {
+  background: var(--ink-800); padding: 10px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cc-dots { display: flex; gap: 5px; }
+.cd { width: 10px; height: 10px; border-radius: 50%; }
+.cd-r { background: #FF5F57; } .cd-y { background: #FEBC2E; } .cd-g { background: #28C840; }
+.cc-label { font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.5); letter-spacing: 0.05em; }
+.cc-live { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; font-weight: 700; color: var(--mint); }
+.cc-live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--mint); animation: pulse 2s ease infinite; }
+
+.cc-layout { display: grid; grid-template-columns: 196px 1fr; min-height: 380px; }
+.cc-sidebar {
+  background: var(--ink-50); border-right: 1px solid var(--ink-200);
+  padding: 14px 10px; display: flex; flex-direction: column; gap: 2px;
+}
+.cc-nav {
+  padding: 8px 10px; border-radius: 8px;
+  font-size: 0.78rem; font-weight: 500; color: var(--ink-400);
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+}
+.cc-nav.on { background: var(--green-100); color: var(--green-700); font-weight: 600; }
+.cc-badge { margin-left: auto; background: var(--green-700); color: var(--white); font-size: 0.6rem; font-weight: 800; padding: 1px 5px; border-radius: 8px; }
+.cc-sep { height: 1px; background: var(--ink-200); margin: 8px 0; }
+.cc-main { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+
+/* KPI row */
+.kpi-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.kpi { background: var(--ink-50); border: 1px solid var(--ink-200); border-radius: 10px; padding: 11px 12px; text-align: center; }
+.kpi-val { font-size: 1.25rem; font-weight: 700; color: var(--green-700); line-height: 1; margin-bottom: 2px; }
+.kpi-lbl { font-size: 0.63rem; color: var(--ink-400); font-weight: 500; }
+.kpi-delta { font-size: 0.6rem; color: #16A34A; font-weight: 700; margin-top: 2px; }
+
+/* Dual persona widget */
+.persona-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.persona-card {
+  border-radius: var(--radius); padding: 11px 12px;
+  border: 1px solid;
+}
+.persona-host { background: rgba(255,56,92,0.05); border-color: rgba(255,56,92,0.2); }
+.persona-guest { background: rgba(0,195,137,0.06); border-color: var(--mint-border); }
+.persona-label { font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.host-label { color: var(--airbnb); }
+.guest-label { color: var(--mint); }
+.persona-ticket-title { font-size: 0.73rem; font-weight: 600; color: var(--ink); margin-bottom: 3px; line-height: 1.3; }
+.persona-meta { font-size: 0.62rem; color: var(--ink-400); }
+.persona-tag { display: inline-block; font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-top: 5px; }
+.tag-escalate { background: #FEF2F2; color: #DC2626; }
+.tag-ai { background: var(--green-100); color: var(--green-700); }
+.tag-open { background: #EFF6FF; color: #1D4ED8; }
+
+/* Unified timeline bridge */
+.timeline-bridge {
+  background: linear-gradient(135deg, var(--ink-800) 0%, #0F2027 100%);
+  border: 1px solid var(--mint-border); border-radius: var(--radius);
+  padding: 11px 13px;
+}
+.tb-head { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+.tb-orb {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--mint), var(--green-700));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem; font-weight: 800; color: var(--white); flex-shrink: 0;
+}
+.tb-title { font-size: 0.75rem; font-weight: 700; color: var(--white); }
+.tb-sub { font-size: 0.6rem; color: rgba(255,255,255,0.4); }
+.tb-events { display: flex; flex-direction: column; gap: 5px; }
+.tb-event { display: flex; align-items: flex-start; gap: 7px; }
+.tb-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+.tb-text { font-size: 0.68rem; color: rgba(255,255,255,0.6); line-height: 1.35; }
+.tb-time { font-size: 0.6rem; color: rgba(255,255,255,0.3); margin-left: auto; white-space: nowrap; flex-shrink: 0; }
+
+/* TRUST BAR */
+.trust { border-top: 1px solid var(--ink-200); border-bottom: 1px solid var(--ink-200); padding: 28px 40px; }
+.trust-inner { max-width: var(--max); margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.trust-lbl { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; color: var(--ink-400); }
+.trust-logos { display: flex; align-items: center; gap: 48px; flex-wrap: wrap; justify-content: center; }
+.trust-logo { font-size: 1.05rem; font-weight: 800; color: var(--ink-200); letter-spacing: -0.02em; transition: color 0.2s; }
+.trust-logo:hover { color: var(--ink-400); }
+
+/* SECTIONS */
+.section { padding: 88px 40px; }
+.section-inner { max-width: var(--max); margin: 0 auto; }
+.section-alt { background: var(--ink-50); }
+.eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 700; color: var(--green-700); margin-bottom: 12px; }
+h2.section-h { font-family: var(--font-serif); font-size: 2.4rem; line-height: 1.15; color: var(--ink); margin-bottom: 16px; font-weight: 400; }
+h2.section-h em { font-style: italic; color: var(--green-700); }
+.section-desc { font-size: 1.0625rem; line-height: 1.72; color: var(--ink-400); max-width: 560px; margin-bottom: 52px; }
+
+/* CHALLENGES */
+.challenge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.ch-card { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--radius-lg); padding: 30px; transition: all 0.2s; }
+.ch-card:hover { border-color: var(--green-400); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.ch-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--ink-100); margin-bottom: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+.ch-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; color: var(--ink); }
+.ch-card p  { font-size: 0.875rem; line-height: 1.68; color: var(--ink-400); }
+
+/* FREDDY SECTION */
+.freddy-section { background: var(--ink-800); padding: 88px 40px; color: var(--white); position: relative; overflow: hidden; }
+.freddy-section::before { content: ''; position: absolute; top: -120px; right: -120px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(0,195,137,0.06) 0%, transparent 70%); pointer-events: none; }
+.freddy-section::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(1,119,50,0.08) 0%, transparent 70%); pointer-events: none; }
+.freddy-inner { max-width: var(--max); margin: 0 auto; position: relative; z-index: 1; }
+.freddy-header { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-bottom: 56px; }
+.freddy-eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--mint-dim); border: 1px solid var(--mint-border); color: var(--mint); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 12px 5px 8px; border-radius: 100px; margin-bottom: 20px; }
+h2.freddy-h { font-family: var(--font-serif); font-size: 2.4rem; line-height: 1.15; margin-bottom: 20px; color: var(--white); font-weight: 400; }
+h2.freddy-h em { font-style: italic; color: var(--mint); }
+.freddy-body { font-size: 1rem; line-height: 1.75; color: rgba(255,255,255,0.6); margin-bottom: 22px; }
+.freddy-warmth { background: var(--mint-dim); border: 1px solid var(--mint-border); border-radius: var(--radius); padding: 20px 22px; font-size: 0.9rem; line-height: 1.65; color: rgba(255,255,255,0.8); font-style: italic; }
+.freddy-warmth strong { color: var(--mint); font-style: normal; font-weight: 700; }
+
+/* Chat demo */
+.freddy-demo { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-lg); padding: 22px; display: flex; flex-direction: column; gap: 14px; }
+.demo-head { display: flex; align-items: center; justify-content: space-between; }
+.demo-title { font-size: 0.875rem; font-weight: 700; color: var(--white); }
+.demo-badge { display: flex; align-items: center; gap: 5px; background: var(--mint-dim); border: 1px solid var(--mint-border); color: var(--mint); font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--mint); animation: pulse 2s infinite; }
+.demo-user { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 10px 12px; font-size: 0.78rem; color: rgba(255,255,255,0.6); display: flex; align-items: center; gap: 10px; }
+.user-dot { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; color: var(--white); }
+.user-name { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+.user-plan { font-size: 0.65rem; color: var(--airbnb); }
+.chat-wrap { display: flex; flex-direction: column; gap: 8px; }
+.bubble { padding: 10px 13px; border-radius: 10px; font-size: 0.82rem; line-height: 1.5; max-width: 88%; }
+.bubble-user { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); align-self: flex-end; border-bottom-right-radius: 3px; }
+.bubble-freddy { background: rgba(0,195,137,0.1); border: 1px solid rgba(0,195,137,0.2); color: rgba(255,255,255,0.85); align-self: flex-start; border-bottom-left-radius: 3px; }
+.bubble-label { font-size: 0.63rem; font-weight: 700; color: var(--mint); margin-bottom: 4px; }
+.demo-resolved { background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2); border-radius: 8px; padding: 9px 12px; display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: rgba(255,255,255,0.7); }
+
+/* Freddy pillars */
+.freddy-pillars { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.pillar { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 28px; transition: all 0.2s; }
+.pillar:hover { background: rgba(0,195,137,0.06); border-color: var(--mint-border); }
+.pillar-ico { width: 44px; height: 44px; border-radius: 10px; background: var(--mint-dim); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 18px; }
+.pillar h3 { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+.pillar p  { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.68; }
+.pillar-chip { display: inline-block; margin-top: 16px; background: var(--mint-dim); border: 1px solid var(--mint-border); color: var(--mint); font-size: 0.68rem; font-weight: 700; padding: 3px 9px; border-radius: 4px; }
+
+/* CAPABILITIES */
+.caps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.cap { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--radius-lg); padding: 28px; transition: all 0.2s; }
+.cap:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.cap-ico { width: 44px; height: 44px; border-radius: 10px; background: var(--green-50); border: 1px solid var(--green-100); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 18px; }
+.cap h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; color: var(--ink); }
+.cap p  { font-size: 0.875rem; line-height: 1.68; color: var(--ink-400); }
+.cap-tag { display: inline-flex; align-items: center; gap: 4px; margin-top: 16px; background: var(--green-100); color: var(--green-700); font-size: 0.68rem; font-weight: 700; padding: 3px 9px; border-radius: 4px; }
+
+/* METRICS */
+.metrics { background: var(--green-700); padding: 64px 40px; color: var(--white); }
+.metrics-inner { max-width: var(--max); margin: 0 auto; }
+.metrics-eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; color: rgba(255,255,255,0.55); margin-bottom: 36px; text-align: center; }
+.metrics-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+.metric { background: rgba(255,255,255,0.12); border-radius: var(--radius-lg); padding: 28px 20px; text-align: center; transition: background 0.2s; }
+.metric:hover { background: rgba(255,255,255,0.18); }
+.metric-val { font-family: var(--font-serif); font-size: 3rem; line-height: 1; color: var(--white); letter-spacing: -0.02em; margin-bottom: 10px; }
+.metric-val sup { font-size: 1.4rem; vertical-align: super; }
+.metric-val sub { font-size: 1.4rem; }
+.metric-lbl { font-size: 0.82rem; color: rgba(255,255,255,0.65); line-height: 1.5; }
+.metrics-footnote { text-align: center; margin-top: 24px; font-size: 0.72rem; color: rgba(255,255,255,0.35); font-style: italic; }
+
+/* PROOF SECTION */
+.proof-section { padding: 88px 40px; }
+.proof-inner { max-width: var(--max); margin: 0 auto; }
+.proof-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 64px; align-items: start; margin-top: 52px; }
+.quote-block { background: var(--ink-50); border: 1px solid var(--ink-200); border-radius: var(--radius-xl); padding: 36px; }
+.q-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.q-badge { background: var(--green-100); color: var(--green-700); font-size: 0.7rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+.q-text { font-family: var(--font-serif); font-size: 1.3rem; line-height: 1.55; color: var(--ink); margin-bottom: 24px; font-weight: 400; }
+.q-text em { font-style: italic; color: var(--green-700); }
+.q-attr { display: flex; align-items: center; gap: 12px; }
+.q-avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; background: linear-gradient(135deg, var(--mint), var(--green-700)); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; color: var(--white); }
+.q-name { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
+.q-role { font-size: 0.8rem; color: var(--ink-400); margin-top: 2px; }
+.proof-cards { display: flex; flex-direction: column; gap: 14px; }
+.pcard { background: var(--white); border: 1px solid var(--ink-200); border-radius: var(--radius-lg); padding: 20px 22px; display: flex; align-items: center; gap: 16px; transition: all 0.2s; }
+.pcard:hover { box-shadow: var(--shadow-md); border-color: var(--green-400); }
+.pcard-logo { width: 52px; height: 52px; border-radius: 10px; flex-shrink: 0; background: var(--ink-50); border: 1px solid var(--ink-200); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; color: var(--ink-600); text-align: center; line-height: 1.2; }
+.pcard-body { flex: 1; }
+.pcard-name { font-weight: 700; font-size: 0.875rem; color: var(--ink); margin-bottom: 3px; }
+.pcard-desc { font-size: 0.8rem; color: var(--ink-400); line-height: 1.45; }
+.pcard-stat { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 400; color: var(--green-700); white-space: nowrap; text-align: right; flex-shrink: 0; }
+.pcard-stat-lbl { font-size: 0.65rem; color: var(--ink-400); font-family: var(--font-sans); margin-top: 1px; white-space: nowrap; }
+
+/* CTA */
+.cta-section { background: var(--ink-800); padding: 88px 40px; color: var(--white); text-align: center; position: relative; overflow: hidden; }
+.cta-section::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 800px; height: 400px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0,195,137,0.06) 0%, transparent 70%); pointer-events: none; }
+.cta-inner { max-width: 600px; margin: 0 auto; position: relative; z-index: 1; }
+h2.cta-h { font-family: var(--font-serif); font-size: 2.4rem; line-height: 1.15; color: var(--white); margin-bottom: 16px; font-weight: 400; }
+h2.cta-h em { font-style: italic; color: var(--mint); }
+.cta-sub { font-size: 1rem; color: rgba(255,255,255,0.55); line-height: 1.7; margin-bottom: 40px; }
+.cta-form { display: flex; gap: 10px; max-width: 440px; margin: 0 auto 14px; }
+.cta-input { flex: 1; padding: 13px 16px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); background: rgba(255,255,255,0.07); color: var(--white); font-size: 0.9rem; font-family: var(--font-sans); outline: none; }
+.cta-input::placeholder { color: rgba(255,255,255,0.3); }
+.cta-input:focus { border-color: var(--mint); box-shadow: 0 0 0 3px var(--mint-dim); }
+.cta-note { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+.cta-options { display: flex; gap: 24px; justify-content: center; margin-top: 32px; }
+.cta-opt { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-lg); padding: 22px 24px; text-align: left; flex: 1; max-width: 200px; transition: all 0.2s; }
+.cta-opt:hover { border-color: var(--mint-border); background: var(--mint-dim); }
+.cta-opt-ico { font-size: 1.4rem; margin-bottom: 10px; }
+.cta-opt-title { font-size: 0.875rem; font-weight: 700; color: var(--white); margin-bottom: 5px; }
+.cta-opt-desc { font-size: 0.78rem; color: rgba(255,255,255,0.45); line-height: 1.4; }
+
+/* FOOTER */
+footer { border-top: 1px solid var(--ink-200); padding: 24px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; }
+.footer-left { display: flex; align-items: center; gap: 16px; }
+.footer-logo img { height: 20px; opacity: 0.7; }
+.footer-copy { font-size: 0.78rem; color: var(--ink-400); }
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { font-size: 0.78rem; color: var(--ink-400); transition: color 0.15s; }
+.footer-links a:hover { color: var(--green-700); }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.hero-left > * { animation: fadeUp 0.55s ease both; }
+.hero-left > *:nth-child(1) { animation-delay: 0.05s; }
+.hero-left > *:nth-child(2) { animation-delay: 0.12s; }
+.hero-left > *:nth-child(3) { animation-delay: 0.19s; }
+.hero-left > *:nth-child(4) { animation-delay: 0.26s; }
+.hero-left > *:nth-child(5) { animation-delay: 0.33s; }
+.hero-visual { animation: fadeUp 0.6s 0.2s ease both; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="https://www.freshworks.com/freshdesk/omni/" class="fw-logo">
+      <img src="https://dam.freshworks.com/m/1d230ee78c07681a/original/headerLogoLight.webp" alt="Freshworks" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+      <span class="fw-logo-fallback">freshworks</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Product</a></li>
+      <li><a href="#">Solutions</a></li>
+      <li><a href="#">Customers</a></li>
+      <li><a href="#">Pricing</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="https://login.freshworks.com/email-login/" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="https://www.freshworks.com/freshdesk/omni/demo-request/" class="btn btn-green btn-sm">Book a demo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        Freshdesk Omni · Built for Airbnb
+      </div>
+      <h1 class="hero-h">
+        Resolve every dispute before it<br>becomes a <em>1-star review</em>
+      </h1>
+      <p class="hero-sub">
+        Hosts and guests both need help at the same time, about the same stay. Freshdesk Omni gives your CX team a unified view of both sides of every conversation, so agents resolve faster and no one feels like they drew the short straw.
+      </p>
+      <div class="hero-ctas">
+        <a href="https://www.freshworks.com/freshdesk/omni/demo-request/" class="btn btn-green btn-lg">Book a Demo</a>
+        <a href="https://www.freshworks.com/freshdesk/omni/signup/" class="btn btn-outline-green btn-lg">Try it free</a>
+      </div>
+      <div class="hero-proof">
+        <div class="proof-avatars">
+          <div class="proof-avatar pa-1">W</div>
+          <div class="proof-avatar pa-2">T</div>
+          <div class="proof-avatar pa-3">C</div>
+          <div class="proof-avatar pa-4">7</div>
+        </div>
+        <span>Trusted by <strong>75,000+ businesses</strong> including WebBeds, Thomas Cook and Cinnamon Hotels</span>
+      </div>
+    </div>
+
+    <!-- Dual persona Command Center -->
+    <div class="hero-visual">
+      <div class="hero-float-1">
+        <span>🛡️</span>
+        Freddy flagged <span class="float-green">urgent escalation</span> in 4s
+      </div>
+
+      <div class="cc">
+        <div class="cc-bar">
+          <div class="cc-dots">
+            <div class="cd cd-r"></div><div class="cd cd-y"></div><div class="cd cd-g"></div>
+          </div>
+          <span class="cc-label">FRESHDESK COMMAND CENTER</span>
+          <div class="cc-live"><span class="cc-live-dot"></span>Live</div>
+        </div>
+
+        <div class="cc-layout">
+          <div class="cc-sidebar">
+            <div class="cc-nav on">📥 All Conversations <span class="cc-badge">41</span></div>
+            <div class="cc-nav">🤖 Freddy AI</div>
+            <div class="cc-nav">🏠 Host tickets</div>
+            <div class="cc-nav">🧳 Guest tickets</div>
+            <div class="cc-nav">⚖️ Disputes</div>
+            <div class="cc-sep"></div>
+            <div class="cc-nav">🚨 Active trips <span class="cc-badge" style="background:#DC2626">7</span></div>
+            <div class="cc-nav">💬 Chat</div>
+            <div class="cc-nav">📧 Email</div>
+          </div>
+
+          <div class="cc-main">
+            <div class="kpi-row">
+              <div class="kpi">
+                <div class="kpi-val">96%</div>
+                <div class="kpi-lbl">CSAT Today</div>
+                <div class="kpi-delta">↑ +9% vs last month</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-val">62%</div>
+                <div class="kpi-lbl">Freddy AI resolved</div>
+                <div class="kpi-delta">↑ from 8%</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-val">&lt;90s</div>
+                <div class="kpi-lbl">Active trip response</div>
+                <div class="kpi-delta">SLA: met ✓</div>
+              </div>
+            </div>
+
+            <!-- Dual persona cards -->
+            <div class="persona-row">
+              <div class="persona-card persona-host">
+                <div class="persona-label host-label">Host</div>
+                <div class="persona-ticket-title">Guest claims listing mismatch, requesting refund</div>
+                <div class="persona-meta">📧 Email · Check-in today</div>
+                <span class="persona-tag tag-escalate">Escalated</span>
+              </div>
+              <div class="persona-card persona-guest">
+                <div class="persona-label guest-label">Guest</div>
+                <div class="persona-ticket-title">No hot water since arrival, unacceptable</div>
+                <div class="persona-meta">💬 Chat · Active trip · Rio</div>
+                <span class="persona-tag tag-ai">Freddy routing</span>
+              </div>
+            </div>
+
+            <!-- Unified timeline bridge -->
+            <div class="timeline-bridge">
+              <div class="tb-head">
+                <div class="tb-orb">F</div>
+                <div>
+                  <div class="tb-title">Freddy AI: Unified stay timeline</div>
+                  <div class="tb-sub">Host + guest context merged automatically</div>
+                </div>
+              </div>
+              <div class="tb-events">
+                <div class="tb-event">
+                  <div class="tb-dot" style="background:var(--airbnb)"></div>
+                  <div class="tb-text">Host messaged about plumbing issue 6 days before check-in</div>
+                  <div class="tb-time">6d ago</div>
+                </div>
+                <div class="tb-event">
+                  <div class="tb-dot" style="background:#FBBF24"></div>
+                  <div class="tb-text">Guest checked in, no issue reported at door</div>
+                  <div class="tb-time">8hr ago</div>
+                </div>
+                <div class="tb-event">
+                  <div class="tb-dot" style="background:var(--mint)"></div>
+                  <div class="tb-text">Freddy escalated to dispute specialist with full timeline</div>
+                  <div class="tb-time">Now</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-float-2">
+        <span>🌍</span>
+        Active trips prioritised across <span class="float-green">220+ countries</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust">
+  <div class="trust-inner">
+    <p class="trust-lbl">Trusted by 75,000+ businesses worldwide, including</p>
+    <div class="trust-logos">
+      <span class="trust-logo">WebBeds</span>
+      <span class="trust-logo">Thomas Cook</span>
+      <span class="trust-logo">Cinnamon Hotels</span>
+      <span class="trust-logo">Collinson</span>
+      <span class="trust-logo">Klarna</span>
+      <span class="trust-logo">PhonePe</span>
+    </div>
+  </div>
+</div>
+
+<!-- CHALLENGES -->
+<section class="section">
+  <div class="section-inner">
+    <p class="eyebrow">The Challenge</p>
+    <h2 class="section-h">Two-sided marketplaces create<br><em>two-sided support problems</em></h2>
+    <p class="section-desc">Every dispute has a host's version and a guest's version. Agents who only see one side make the wrong call. Agents who have to chase both sides are too slow to matter.</p>
+    <div class="challenge-grid">
+      <div class="ch-card">
+        <div class="ch-icon">⚖️</div>
+        <h3>Every dispute has two perspectives that arrive separately</h3>
+        <p>A guest opens a ticket about a broken heater. The host has been messaging about it for a week. Your agent sees neither side in context. A bad decision gets made in seconds, and one party never trusts the platform again.</p>
+      </div>
+      <div class="ch-card">
+        <div class="ch-icon">⏱️</div>
+        <h3>An active trip complaint is a time-critical emergency</h3>
+        <p>When something goes wrong mid-stay, a 4-hour response isn't support. It's abandonment. Guests sleeping in a broken listing, or stranded at 2am, need human escalation in minutes, not a ticket number and a promise.</p>
+      </div>
+      <div class="ch-card">
+        <div class="ch-icon">🌍</div>
+        <h3>220 countries means 220 different cultural and legal contexts</h3>
+        <p>A cancellation policy dispute in Japan, a refund request in Brazil, a safety concern in South Africa. Different languages, different consumer rights laws, different expectations of what "fair" means. Generic routing gets it wrong.</p>
+      </div>
+      <div class="ch-card">
+        <div class="ch-icon">⭐</div>
+        <h3>Every poor resolution is a public review waiting to happen</h3>
+        <p>Hosts and guests both leave ratings. A mishandled dispute can produce two negative reviews from one incident, one from each side. Support quality is directly tied to the marketplace's trust score and host retention.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FREDDY AI -->
+<section class="freddy-section">
+  <div class="freddy-inner">
+    <div class="freddy-header">
+      <div>
+        <div class="freddy-eyebrow"><span class="badge-dot"></span> Meet Freddy AI</div>
+        <h2 class="freddy-h">AI that sees <em>the whole stay,</em><br>not just one ticket</h2>
+        <p class="freddy-body">
+          Most support AI treats every ticket in isolation. A guest complaint and a host complaint about the same stay are handled by two different agents who never compare notes. Freddy AI is built differently.
+        </p>
+        <p class="freddy-body">
+          Freddy automatically merges host and guest context into a unified stay timeline. When a dispute arrives, your agent already has the full picture: what the host reported, when the guest checked in, what was communicated, and what a fair resolution looks like. No detective work. No blame-the-other-side calls.
+        </p>
+        <div class="freddy-warmth">
+          <strong>People-first AI means both sides of a dispute feel heard.</strong> That is what builds trust in a marketplace. Not speed alone, but the sense that someone actually understood the situation before making a call.
+        </div>
+      </div>
+
+      <div class="freddy-demo">
+        <div class="demo-head">
+          <div class="demo-title">Freddy AI: active trip escalation</div>
+          <div class="demo-badge"><span class="badge-dot"></span> Live</div>
+        </div>
+        <div class="demo-user">
+          <div class="user-dot" style="background:linear-gradient(135deg,#F97316,#DC2626)">MK</div>
+          <div>
+            <div class="user-name">Marcus K.</div>
+            <div class="user-plan">Guest · Active stay · Porto · Check-out tomorrow</div>
+          </div>
+          <div style="margin-left:auto;font-size:0.65rem;color:rgba(255,255,255,0.4);">Chat</div>
+        </div>
+        <div class="chat-wrap">
+          <div class="bubble bubble-user">
+            There's no hot water and the host isn't responding. I paid a lot for this place. I need this fixed tonight.
+          </div>
+          <div class="bubble bubble-freddy">
+            <div class="bubble-label">Freddy AI · Airbnb Support</div>
+            Marcus, I can see you're checked in right now and your host last responded 3 hours ago. I'm escalating this to our active-stay team immediately. You'll have a specialist with you in under 2 minutes. In the meantime, I've flagged this stay for priority review.
+          </div>
+          <div class="bubble bubble-user">Thank you, that's all I needed to know someone was actually on it.</div>
+        </div>
+        <div class="demo-resolved">
+          <span>🚨</span>
+          <div>Escalated in <strong style="color:#86EFAC;">38 seconds</strong> · Specialist assigned · Stay flagged for follow-up</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="freddy-pillars">
+      <div class="pillar">
+        <div class="pillar-ico">🤖</div>
+        <h3>Freddy AI Agent</h3>
+        <p>Handles up to 80% of routine queries automatically: cancellation policy questions, payout timelines, review disputes, and how-to guidance for hosts new to the platform, around the clock in 40+ languages.</p>
+        <span class="pillar-chip">Up to 80% auto-resolution</span>
+      </div>
+      <div class="pillar">
+        <div class="pillar-ico">💡</div>
+        <h3>Freddy AI Copilot</h3>
+        <p>When an agent takes a dispute, Freddy Copilot surfaces the full host and guest timeline, flags relevant policies, and drafts a balanced resolution summary. Agents make better decisions, faster, with far less emotional cost.</p>
+        <span class="pillar-chip">60% agent productivity uplift</span>
+      </div>
+      <div class="pillar">
+        <div class="pillar-ico">📊</div>
+        <h3>Freddy AI Insights</h3>
+        <p>Which listings generate the most disputes? Which markets have rising cancellation rates? Which host types churn after bad support experiences? Freddy Insights turns your CX data into a product and trust and safety signal.</p>
+        <span class="pillar-chip">Proactive intelligence</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <p class="eyebrow">Freshdesk Omni Capabilities</p>
+    <h2 class="section-h">One <em>Command Center</em> for both sides<br>of every stay</h2>
+    <p class="section-desc">From active-trip escalations to host payout disputes, every conversation lands in one connected workspace. Full context, every time. No missed urgency.</p>
+    <div class="caps-grid">
+      <div class="cap">
+        <div class="cap-ico">🔗</div>
+        <h3>Unified Host and Guest Timeline</h3>
+        <p>Every ticket is automatically linked to the associated stay, pulling in both the host and guest thread. Agents see the full picture at a glance, without chasing two separate tickets across two queues.</p>
+        <span class="cap-tag">No more half-context calls</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">🚨</div>
+        <h3>Active Trip Priority Routing</h3>
+        <p>A guest in a live stay triggers a different SLA to an inquiry about a future booking. Freshdesk detects active-trip urgency automatically and routes to available specialists with sub-90-second targets.</p>
+        <span class="cap-tag">97% first contact resolution</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">🌐</div>
+        <h3>Multilingual Routing in 40+ Languages</h3>
+        <p>Detect the guest's language, route to a matching agent or Freddy AI language model, and respond with cultural context baked in. No more copy-paste translation. No more one-size-fits-all macros.</p>
+        <span class="cap-tag">40+ languages supported</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">📥</div>
+        <h3>Omnichannel Inbox</h3>
+        <p>Email, in-app chat, WhatsApp, social media. Whether a host tweets a complaint or a guest sends a midnight WhatsApp, every message lands in one place, with the stay context already loaded.</p>
+        <span class="cap-tag">Every channel, one view</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">⚡</div>
+        <h3>Dispute and Safety Escalation Workflows</h3>
+        <p>Set up escalation paths for safety events, AirCover claims, and major property disputes with one-click escalation trees. 50+ prebuilt agentic workflows, ready to launch on day one.</p>
+        <span class="cap-tag">50+ prebuilt workflows</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">📊</div>
+        <h3>Trust and Safety Analytics</h3>
+        <p>Track dispute rates by region, listing type, and host tier. Spot patterns before they become systemic. Give your trust and safety team the data they need to act proactively rather than reactively.</p>
+        <span class="cap-tag">Data-driven marketplace health</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<div class="metrics">
+  <div class="metrics-inner">
+    <p class="metrics-eyebrow">Industry-leading results with Freshdesk Omni · sourced from Customer Results and Benchmark Report 2025</p>
+    <div class="metrics-grid">
+      <div class="metric">
+        <div class="metric-val">80<sup>%</sup></div>
+        <div class="metric-lbl">Resolutions with<br>Freddy AI Agent</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">&lt;2<sub>min</sub></div>
+        <div class="metric-lbl">Average conversational<br>resolution time</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">97<sup>%</sup></div>
+        <div class="metric-lbl">Omnichannel first<br>contact resolution rate</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">60<sup>%</sup></div>
+        <div class="metric-lbl">Agent productivity uplift<br>with Freddy AI Copilot</div>
+      </div>
+    </div>
+    <p class="metrics-footnote">*Stats sourced from Freshworks Customer Results and Customer Service Benchmark Report 2025</p>
+  </div>
+</div>
+
+<!-- PROOF -->
+<section class="proof-section">
+  <div class="proof-inner">
+    <p class="eyebrow">Travel and hospitality customers trust Freshworks</p>
+    <h2 class="section-h">Real results from companies<br><em>close to home for Airbnb</em></h2>
+    <div class="proof-grid">
+      <div class="quote-block">
+        <div class="q-top">
+          <span class="q-badge">Thomas Cook · Freshworks customer</span>
+          <span style="font-size:1.5rem;color:var(--green-700);">"</span>
+        </div>
+        <p class="q-text">
+          Working with Freshworks, it feels like they listen to us. They take on board our honest feedback, adapt where necessary, and always bring us ideas. <em>We have exceeded our initial goals</em> and are already working on deeper integration to improve efficiency further.
+        </p>
+        <div class="q-attr">
+          <div class="q-avatar">TC</div>
+          <div>
+            <div class="q-name">Thomas Cook Customer Operations</div>
+            <div class="q-role">20,000+ customers per week · 80 support agents · Freshdesk Omnichannel</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="proof-cards">
+        <div class="pcard">
+          <div class="pcard-logo">Thomas<br>Cook</div>
+          <div class="pcard-body">
+            <div class="pcard-name">Thomas Cook: digital-first travel agency</div>
+            <div class="pcard-desc">Rebuilt CX on Freshdesk Omnichannel. Trustpilot score jumped from 1 to 4 stars. AI chatbot deflects and triages at scale.</div>
+          </div>
+          <div>
+            <div class="pcard-stat">4★</div>
+            <div class="pcard-stat-lbl">Trustpilot (was 1★)</div>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-logo">Web<br>Beds</div>
+          <div class="pcard-body">
+            <div class="pcard-name">WebBeds: global travel marketplace</div>
+            <div class="pcard-desc">200,000 tickets per month across 50+ countries managed with Freshdesk automation. One global support instance.</div>
+          </div>
+          <div>
+            <div class="pcard-stat">200k</div>
+            <div class="pcard-stat-lbl">tickets/month</div>
+          </div>
+        </div>
+        <div class="pcard">
+          <div class="pcard-logo">Cinnamon<br>Hotels</div>
+          <div class="pcard-body">
+            <div class="pcard-name">Cinnamon Hotels: hospitality group</div>
+            <div class="pcard-desc">Freshdesk unified all guest enquiries into one platform. Response times halved. Online enquiries converted to bookings at measurably higher rates.</div>
+          </div>
+          <div>
+            <div class="pcard-stat">2x</div>
+            <div class="pcard-stat-lbl">faster responses</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h">See Freshdesk Omni<br>built <em>for Airbnb</em></h2>
+    <p class="cta-sub">
+      We will show you exactly how Freshdesk handles two-sided dispute resolution, active trip escalation, and multilingual routing in a 45-minute session tailored to your support workflows.
+    </p>
+    <div class="cta-form">
+      <input class="cta-input" type="email" placeholder="you@airbnb.com" />
+      <a href="https://www.freshworks.com/freshdesk/omni/demo-request/" class="btn btn-green btn-lg">Book a Demo</a>
+    </div>
+    <p class="cta-note">No credit card required · Free trial available · Set up in minutes</p>
+    <div class="cta-options">
+      <div class="cta-opt">
+        <div class="cta-opt-ico">🎯</div>
+        <div class="cta-opt-title">Free Trial</div>
+        <div class="cta-opt-desc">Try it free, no card needed</div>
+      </div>
+      <div class="cta-opt">
+        <div class="cta-opt-ico">📋</div>
+        <div class="cta-opt-title">Product Tour</div>
+        <div class="cta-opt-desc">Explore at your own pace</div>
+      </div>
+      <div class="cta-opt">
+        <div class="cta-opt-ico">📞</div>
+        <div class="cta-opt-title">Talk to Sales</div>
+        <div class="cta-opt-desc">sales@freshworks.com</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo">
+      <img src="https://dam.freshworks.com/m/329aae6a552dcfa8/original/freshworks-logoBlack.svg" alt="Freshworks" onerror="this.style.display='none'" />
+    </div>
+    <span class="footer-copy">© 2025 Freshworks Inc. All Rights Reserved</span>
+  </div>
+  <div class="footer-links">
+    <a href="https://www.freshworks.com/privacy/">Privacy Notice</a>
+    <a href="https://www.freshworks.com/site-terms/">Site Terms</a>
+    <a href="https://www.freshworks.com/security/">Security</a>
+    <a href="https://www.freshworks.com/contact/">Contact Freshworks</a>
+  </div>
+</footer>
+
+</body>
+</html>
