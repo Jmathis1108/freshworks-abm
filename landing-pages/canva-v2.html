@@ -3,317 +3,1268 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Freshdesk Omni: Prospect Landing Pages</title>
+<title>Freshdesk Omni for Canva: Customer service that puts people first</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
+/* ─────────────────────────────────────────────────────────────────
+   BRAND TOKENS: sourced directly from freshworks.com/freshdesk/omni
+   Colors, messaging, structure all match the real Freshdesk Omni page
+   ───────────────────────────────────────────────────────────────── */
 :root {
+  /* Freshworks green palette */
+  --green-900: #014D22;
   --green-700: #017732;
+  --green-500: #1EA95C;
+  --green-400: #3DC874;
   --green-100: #D6F5E4;
   --green-50:  #F0FBF5;
+
+  /* Neutrals */
   --ink:       #0D1117;
+  --ink-800:   #1C2333;
   --ink-600:   #374151;
   --ink-400:   #6B7280;
   --ink-200:   #D1D5DB;
   --ink-100:   #F3F4F6;
   --ink-50:    #F9FAFB;
   --white:     #FFFFFF;
+
+  /* Freddy AI accent */
   --mint:      #00C389;
+  --mint-dim:  rgba(0,195,137,0.12);
+  --mint-border: rgba(0,195,137,0.25);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.06);
+  --shadow-xl: 0 32px 64px rgba(0,0,0,0.12);
+
+  /* Typography */
   --font-sans: 'DM Sans', -apple-system, sans-serif;
   --font-serif: 'DM Serif Display', Georgia, serif;
+
+  /* Layout */
+  --max: 1200px;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; }
+html { font-size: 16px; scroll-behavior: smooth; }
 body {
   font-family: var(--font-sans);
-  background: var(--ink-50);
+  background: var(--white);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+
+/* ─── NAVIGATION ─────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 300;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--ink-200);
+}
+.nav-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 68px;
 }
 
-/* HEADER */
-header {
-  background: var(--white);
-  border-bottom: 1px solid var(--ink-200);
-  padding: 0 40px;
+/* Freshworks logo: using actual webp from dam.freshworks.com */
+.fw-logo {
+  display: flex; align-items: center; gap: 0;
+  flex-shrink: 0;
 }
-.header-inner {
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 64px;
+.fw-logo img {
+  height: 28px; width: auto;
 }
-.header-logo img { height: 26px; width: auto; }
-.header-badge {
-  display: inline-flex; align-items: center; gap: 6px;
+/* Fallback logo if image fails */
+.fw-logo-fallback {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 1.1rem;
+  color: var(--ink);
+}
+.fw-logo-mark {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--green-700); display: flex; align-items: center;
+  justify-content: center;
+}
+
+.nav-links {
+  display: flex; align-items: center; gap: 2px; list-style: none;
+}
+.nav-links a {
+  padding: 7px 14px; border-radius: 8px;
+  font-size: 0.875rem; font-weight: 500; color: var(--ink-600);
+  transition: background 0.15s, color 0.15s;
+}
+.nav-links a:hover { background: var(--ink-100); color: var(--ink); }
+
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  font-family: var(--font-sans); font-size: 0.875rem; font-weight: 600;
+  border: none; cursor: pointer; border-radius: 9px;
+  transition: all 0.18s; white-space: nowrap;
+}
+.btn-sm    { padding: 8px 18px; }
+.btn-md    { padding: 11px 22px; }
+.btn-lg    { padding: 14px 30px; font-size: 0.95rem; border-radius: 10px; }
+.btn-xl    { padding: 16px 36px; font-size: 1rem; border-radius: 12px; }
+
+.btn-ghost {
+  background: transparent; color: var(--ink-600);
+  border: 1px solid var(--ink-200);
+}
+.btn-ghost:hover { background: var(--ink-100); border-color: var(--ink-400); color: var(--ink); }
+
+.btn-green {
+  background: var(--green-700); color: var(--white);
+  box-shadow: 0 1px 3px rgba(1,119,50,0.25), 0 0 0 1px rgba(1,119,50,0.1);
+}
+.btn-green:hover {
+  background: var(--green-900);
+  box-shadow: 0 4px 16px rgba(1,119,50,0.4), 0 0 0 1px rgba(1,119,50,0.2);
+  transform: translateY(-1px);
+}
+
+.btn-outline-green {
+  background: transparent; color: var(--green-700);
+  border: 1.5px solid var(--green-700);
+}
+.btn-outline-green:hover {
+  background: var(--green-50); transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(1,119,50,0.15);
+}
+
+/* ─── HERO ───────────────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(180deg, var(--ink-50) 0%, var(--white) 60%);
+  padding: 80px 40px 0;
+  overflow: hidden;
+  position: relative;
+}
+/* Subtle grid texture matching FW design */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(1,119,50,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(1,119,50,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.hero-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: flex-start;
+  position: relative;
+}
+
+/* Left column */
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
   background: var(--green-100); color: var(--green-700);
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
-  text-transform: uppercase; padding: 4px 10px; border-radius: 100px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 5px 12px 5px 8px;
+  border-radius: 100px; margin-bottom: 22px;
 }
-.badge-dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--green-700);
+.hero-eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green-700);
   animation: pulse 2.5s ease infinite;
 }
 @keyframes pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.75); }
+  50%       { opacity: 0.6; transform: scale(0.8); }
 }
 
-/* HERO */
-.hero {
-  background: var(--white);
-  border-bottom: 1px solid var(--ink-200);
-  padding: 56px 40px 52px;
-  text-align: center;
-}
-.hero-inner { max-width: 600px; margin: 0 auto; }
-.hero h1 {
+h1.hero-headline {
   font-family: var(--font-serif);
-  font-size: 2.4rem; line-height: 1.15;
-  color: var(--ink); margin-bottom: 14px; font-weight: 400;
+  font-size: 3rem; line-height: 1.1; letter-spacing: -0.01em;
+  color: var(--ink); margin-bottom: 22px;
+  font-weight: 400; /* DM Serif Display is inherently bold */
 }
-.hero h1 em { font-style: italic; color: var(--green-700); }
-.hero p {
-  font-size: 1rem; line-height: 1.7;
-  color: var(--ink-400); max-width: 480px; margin: 0 auto;
-}
-
-/* PROSPECT GRID */
-main {
-  flex: 1;
-  max-width: 900px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 48px 40px;
-}
-.grid-label {
-  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.1em; color: var(--ink-400); margin-bottom: 20px;
-}
-.prospects {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 16px;
+h1.hero-headline em {
+  font-style: italic; color: var(--green-700);
 }
 
-/* PROSPECT CARD */
-.card {
+.hero-sub {
+  font-size: 1.05rem; line-height: 1.72; color: var(--ink-400);
+  max-width: 480px; margin-bottom: 36px; font-weight: 400;
+}
+
+.hero-ctas { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 36px; }
+
+.hero-social-proof {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 0.82rem; color: var(--ink-400);
+}
+.proof-avatars { display: flex; }
+.proof-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--white); margin-left: -8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.62rem; font-weight: 700; color: var(--white);
+}
+.proof-avatar:first-child { margin-left: 0; }
+.pa-1 { background: linear-gradient(135deg, #4F46E5, #7C3AED); }
+.pa-2 { background: linear-gradient(135deg, #0891B2, #06B6D4); }
+.pa-3 { background: linear-gradient(135deg, var(--green-700), var(--mint)); }
+.pa-4 { background: linear-gradient(135deg, #DC2626, #F97316); }
+
+/* Right column: Command Center mockup */
+.hero-visual { position: relative; }
+.hero-visual-float-1 {
+  position: absolute; top: -12px; right: -20px; z-index: 10;
+  background: var(--white); border: 1px solid var(--ink-200);
+  border-radius: var(--radius); padding: 10px 14px;
+  box-shadow: var(--shadow-md);
+  display: flex; align-items: center; gap: 9px;
+  font-size: 0.8rem; font-weight: 600; color: var(--ink);
+  white-space: nowrap;
+}
+.hero-visual-float-2 {
+  position: absolute; bottom: 48px; left: -24px; z-index: 10;
+  background: var(--ink-800); border-radius: var(--radius);
+  padding: 10px 14px; box-shadow: var(--shadow-md);
+  display: flex; align-items: center; gap: 9px;
+  font-size: 0.78rem; font-weight: 600; color: var(--white);
+  white-space: nowrap;
+}
+.float-icon { font-size: 1rem; }
+.float-green { color: var(--mint); }
+
+/* Command Center UI */
+.cc {
   background: var(--white);
   border: 1px solid var(--ink-200);
-  border-radius: 16px;
-  padding: 24px;
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  transition: all 0.2s;
-  position: relative;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: var(--shadow-xl);
   overflow: hidden;
 }
-.card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--card-color, var(--green-700));
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.card:hover {
-  border-color: var(--card-color, var(--green-700));
-  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-  transform: translateY(-2px);
-}
-.card:hover::before { opacity: 1; }
-
-.card-top {
+.cc-bar {
+  background: var(--ink-800); padding: 10px 18px;
   display: flex; align-items: center; justify-content: space-between;
 }
-.card-logo {
-  width: 44px; height: 44px; border-radius: 10px;
-  background: var(--card-bg, var(--ink-100));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.4rem;
+.cc-dots { display: flex; gap: 5px; }
+.cd { width: 10px; height: 10px; border-radius: 50%; }
+.cd-r { background: #FF5F57; }
+.cd-y { background: #FEBC2E; }
+.cd-g { background: #28C840; }
+.cc-label {
+  font-size: 0.72rem; font-weight: 600; color: rgba(255,255,255,0.5);
+  letter-spacing: 0.05em;
 }
-.card-arrow {
-  width: 28px; height: 28px; border-radius: 50%;
-  background: var(--ink-100);
+.cc-live {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 0.7rem; font-weight: 700; color: var(--mint);
+}
+.cc-live-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--mint); animation: pulse 2s ease infinite;
+}
+
+.cc-layout {
+  display: grid; grid-template-columns: 196px 1fr;
+  min-height: 380px;
+}
+.cc-sidebar {
+  background: var(--ink-50);
+  border-right: 1px solid var(--ink-200);
+  padding: 14px 10px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.cc-nav {
+  padding: 8px 10px; border-radius: 8px;
+  font-size: 0.78rem; font-weight: 500; color: var(--ink-400);
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+}
+.cc-nav.on { background: var(--green-100); color: var(--green-700); font-weight: 600; }
+.cc-badge {
+  margin-left: auto; background: var(--green-700); color: var(--white);
+  font-size: 0.6rem; font-weight: 800; padding: 1px 5px; border-radius: 8px;
+}
+.cc-sep { height: 1px; background: var(--ink-200); margin: 8px 0; }
+
+.cc-main { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+
+/* KPI row */
+.kpi-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+.kpi {
+  background: var(--ink-50); border: 1px solid var(--ink-200);
+  border-radius: 10px; padding: 11px 12px; text-align: center;
+}
+.kpi-val { font-size: 1.35rem; font-weight: 700; color: var(--green-700); line-height: 1; margin-bottom: 2px; }
+.kpi-lbl { font-size: 0.65rem; color: var(--ink-400); font-weight: 500; }
+.kpi-delta { font-size: 0.62rem; color: #16A34A; font-weight: 700; margin-top: 2px; }
+
+/* Freddy card inside mockup */
+.freddy-mini {
+  background: linear-gradient(135deg, var(--ink-800) 0%, #0F2027 100%);
+  border-radius: var(--radius);
+  border: 1px solid var(--mint-border);
+  padding: 12px 14px;
+}
+.freddy-mini-head {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}
+.freddy-orb {
+  width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--mint), var(--green-700));
   display: flex; align-items: center; justify-content: center;
-  font-size: 0.8rem; color: var(--ink-400);
+  font-size: 0.65rem; font-weight: 800; color: var(--white);
+  box-shadow: 0 0 0 2px var(--mint-border);
+}
+.freddy-mini-name { font-size: 0.78rem; font-weight: 700; color: var(--white); }
+.freddy-mini-status { font-size: 0.62rem; color: rgba(255,255,255,0.45); }
+.freddy-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.fs {
+  background: rgba(255,255,255,0.06); border-radius: 8px; padding: 7px 9px;
+}
+.fs-val { font-size: 0.95rem; font-weight: 700; color: var(--mint); line-height: 1; margin-bottom: 2px; }
+.fs-lbl { font-size: 0.6rem; color: rgba(255,255,255,0.4); }
+
+/* Ticket feed */
+.feed-label {
+  font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink-400); margin-bottom: 6px;
+}
+.ticket {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: 8px;
+  border: 1px solid var(--ink-200); background: var(--white);
+  margin-bottom: 5px; transition: box-shadow 0.15s;
+}
+.t-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.t-body { flex: 1; min-width: 0; }
+.t-title { font-size: 0.75rem; font-weight: 600; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.t-meta { font-size: 0.63rem; color: var(--ink-400); margin-top: 1px; }
+.t-tag {
+  font-size: 0.62rem; font-weight: 700; padding: 2px 7px;
+  border-radius: 4px; white-space: nowrap; flex-shrink: 0;
+}
+.tag-ai  { background: var(--green-100); color: var(--green-700); }
+.tag-pro { background: #EFF6FF; color: #1D4ED8; }
+.tag-urg { background: #FEF2F2; color: #DC2626; }
+
+/* ─── TRUST BAR ──────────────────────────────────────────────── */
+.trust {
+  border-top: 1px solid var(--ink-200); border-bottom: 1px solid var(--ink-200);
+  padding: 28px 40px; background: var(--white);
+}
+.trust-inner {
+  max-width: var(--max); margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+.trust-lbl {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+  font-weight: 600; color: var(--ink-400);
+}
+.trust-logos {
+  display: flex; align-items: center; gap: 48px; flex-wrap: wrap;
+  justify-content: center;
+}
+.trust-logo {
+  font-family: var(--font-sans); font-size: 1.05rem; font-weight: 800;
+  color: var(--ink-200); letter-spacing: -0.02em;
+  transition: color 0.2s;
+}
+.trust-logo:hover { color: var(--ink-400); }
+
+/* ─── SECTION WRAPPER ────────────────────────────────────────── */
+.section { padding: 88px 40px; }
+.section-inner { max-width: var(--max); margin: 0 auto; }
+.section-alt { background: var(--ink-50); }
+
+.eyebrow {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+  font-weight: 700; color: var(--green-700); margin-bottom: 12px;
+}
+
+h2.section-h {
+  font-family: var(--font-serif);
+  font-size: 2.4rem; line-height: 1.15; letter-spacing: -0.01em;
+  color: var(--ink); margin-bottom: 16px; font-weight: 400;
+}
+h2.section-h em { font-style: italic; color: var(--green-700); }
+
+.section-desc {
+  font-size: 1.0625rem; line-height: 1.72; color: var(--ink-400);
+  max-width: 560px; margin-bottom: 52px;
+}
+
+/* ─── CHALLENGES ─────────────────────────────────────────────── */
+.challenge-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.ch-card {
+  background: var(--white); border: 1px solid var(--ink-200);
+  border-radius: var(--radius-lg); padding: 30px;
   transition: all 0.2s;
 }
-.card:hover .card-arrow {
-  background: var(--card-color, var(--green-700));
+.ch-card:hover {
+  border-color: var(--green-400);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+.ch-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: var(--ink-100); margin-bottom: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+}
+.ch-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; color: var(--ink); }
+.ch-card p  { font-size: 0.875rem; line-height: 1.68; color: var(--ink-400); }
+
+/* ─── FREDDY AI SECTION ──────────────────────────────────────── */
+.freddy-section {
+  background: var(--ink-800);
+  padding: 88px 40px;
+  color: var(--white);
+  position: relative; overflow: hidden;
+}
+/* Background gradient circles */
+.freddy-section::before {
+  content: '';
+  position: absolute; top: -120px; right: -120px;
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,195,137,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.freddy-section::after {
+  content: '';
+  position: absolute; bottom: -80px; left: -80px;
+  width: 400px; height: 400px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(1,119,50,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.freddy-inner {
+  max-width: var(--max); margin: 0 auto; position: relative; z-index: 1;
+}
+
+.freddy-header {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+  align-items: start; margin-bottom: 56px;
+}
+
+.freddy-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--mint-dim); border: 1px solid var(--mint-border);
+  color: var(--mint); font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 5px 12px 5px 8px; border-radius: 100px; margin-bottom: 20px;
+}
+
+h2.freddy-h {
+  font-family: var(--font-serif);
+  font-size: 2.4rem; line-height: 1.15; margin-bottom: 20px;
+  color: var(--white); font-weight: 400;
+}
+h2.freddy-h em { font-style: italic; color: var(--mint); }
+
+.freddy-body-text {
+  font-size: 1rem; line-height: 1.75; color: rgba(255,255,255,0.6); margin-bottom: 22px;
+}
+
+/* Key message callout: the warmth differentiator */
+.freddy-warmth {
+  background: var(--mint-dim);
+  border: 1px solid var(--mint-border);
+  border-radius: var(--radius); padding: 20px 22px;
+  font-size: 0.9rem; line-height: 1.65; color: rgba(255,255,255,0.8);
+  font-style: italic;
+}
+.freddy-warmth strong { color: var(--mint); font-style: normal; font-weight: 700; }
+
+/* Chat demo panel */
+.freddy-demo {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-lg); padding: 22px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.demo-head {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.demo-title { font-size: 0.875rem; font-weight: 700; color: var(--white); }
+.demo-badge {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--mint-dim); border: 1px solid var(--mint-border);
+  color: var(--mint); font-size: 0.68rem; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px;
+}
+.demo-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--mint); animation: pulse 2s infinite; }
+
+.demo-user-info {
+  background: rgba(255,255,255,0.05); border-radius: 10px;
+  padding: 10px 12px; font-size: 0.78rem; color: rgba(255,255,255,0.6);
+  display: flex; align-items: center; gap: 10px;
+}
+.demo-user-dot { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, #7C3AED, #4F46E5);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 800; color: var(--white); }
+.duo-row { display: flex; flex-direction: column; }
+.duo-name { font-size: 0.8rem; font-weight: 700; color: rgba(255,255,255,0.85); }
+.duo-plan { font-size: 0.65rem; color: var(--mint); }
+
+.chat-wrap { display: flex; flex-direction: column; gap: 8px; }
+.bubble {
+  padding: 10px 13px; border-radius: 10px;
+  font-size: 0.82rem; line-height: 1.5; max-width: 86%;
+}
+.bubble-user {
+  background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8);
+  align-self: flex-end; border-bottom-right-radius: 3px;
+}
+.bubble-freddy {
+  background: rgba(0,195,137,0.1); border: 1px solid rgba(0,195,137,0.2);
+  color: rgba(255,255,255,0.85); align-self: flex-start; border-bottom-left-radius: 3px;
+}
+.bubble-label {
+  font-size: 0.63rem; font-weight: 700; color: var(--mint); margin-bottom: 4px;
+}
+.demo-resolved {
+  background: rgba(22,163,74,0.1); border: 1px solid rgba(22,163,74,0.2);
+  border-radius: 8px; padding: 9px 12px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.78rem; color: rgba(255,255,255,0.7);
+}
+.demo-resolved-icon { font-size: 0.95rem; }
+
+/* Freddy pillars */
+.freddy-pillars {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 20px;
+}
+.pillar {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-lg); padding: 28px;
+  transition: all 0.2s;
+}
+.pillar:hover {
+  background: rgba(0,195,137,0.06);
+  border-color: var(--mint-border);
+}
+.pillar-ico {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: var(--mint-dim); display: flex; align-items: center;
+  justify-content: center; font-size: 1.2rem; margin-bottom: 18px;
+}
+.pillar h3 { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+.pillar p  { font-size: 0.875rem; color: rgba(255,255,255,0.5); line-height: 1.68; }
+.pillar-chip {
+  display: inline-block; margin-top: 16px;
+  background: var(--mint-dim); border: 1px solid var(--mint-border);
+  color: var(--mint); font-size: 0.68rem; font-weight: 700;
+  padding: 3px 9px; border-radius: 4px;
+}
+
+/* ─── CAPABILITIES ───────────────────────────────────────────── */
+.caps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.cap {
+  background: var(--white); border: 1px solid var(--ink-200);
+  border-radius: var(--radius-lg); padding: 28px; transition: all 0.2s;
+}
+.cap:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.cap-ico {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: var(--green-50); border: 1px solid var(--green-100);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; margin-bottom: 18px;
+}
+.cap h3 { font-size: 1rem; font-weight: 700; margin-bottom: 10px; color: var(--ink); }
+.cap p  { font-size: 0.875rem; line-height: 1.68; color: var(--ink-400); }
+.cap-tag {
+  display: inline-flex; align-items: center; gap: 4px; margin-top: 16px;
+  background: var(--green-100); color: var(--green-700);
+  font-size: 0.68rem; font-weight: 700; padding: 3px 9px; border-radius: 4px;
+}
+
+/* ─── METRICS STRIP ──────────────────────────────────────────── */
+.metrics {
+  background: var(--green-700); padding: 64px 40px;
   color: var(--white);
 }
+.metrics-inner { max-width: var(--max); margin: 0 auto; }
+.metrics-eyebrow {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em;
+  font-weight: 600; color: rgba(255,255,255,0.55); margin-bottom: 36px; text-align: center;
+}
+.metrics-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+.metric {
+  background: rgba(255,255,255,0.12); border-radius: var(--radius-lg);
+  padding: 28px 20px; text-align: center;
+  transition: background 0.2s;
+}
+.metric:hover { background: rgba(255,255,255,0.18); }
+.metric-val {
+  font-family: var(--font-serif);
+  font-size: 3rem; line-height: 1; color: var(--white);
+  letter-spacing: -0.02em; margin-bottom: 10px;
+}
+.metric-val sup { font-size: 1.4rem; vertical-align: super; }
+.metric-val sub { font-size: 1.4rem; }
+.metric-lbl { font-size: 0.82rem; color: rgba(255,255,255,0.65); line-height: 1.5; }
+.metrics-footnote {
+  text-align: center; margin-top: 24px;
+  font-size: 0.72rem; color: rgba(255,255,255,0.35); font-style: italic;
+}
 
-.card-name {
-  font-size: 1.05rem; font-weight: 700; color: var(--ink);
+/* ─── CUSTOMER PROOF SECTION ─────────────────────────────────── */
+.proof-section { padding: 88px 40px; }
+.proof-inner { max-width: var(--max); margin: 0 auto; }
+.proof-grid {
+  display: grid; grid-template-columns: 1.1fr 0.9fr;
+  gap: 64px; align-items: start; margin-top: 52px;
 }
-.card-desc {
-  font-size: 0.85rem; line-height: 1.55; color: var(--ink-400);
+
+/* Featured quote */
+.quote-block {
+  background: var(--ink-50); border: 1px solid var(--ink-200);
+  border-radius: var(--radius-xl); padding: 36px;
 }
-.card-tag {
-  display: inline-block;
-  font-size: 0.68rem; font-weight: 700;
-  padding: 3px 9px; border-radius: 4px;
+.q-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.q-badge {
   background: var(--green-100); color: var(--green-700);
-  align-self: flex-start;
+  font-size: 0.7rem; font-weight: 700; padding: 4px 10px;
+  border-radius: 20px;
 }
-
-/* ADD MORE card */
-.card-add {
-  border-style: dashed;
-  border-color: var(--ink-200);
-  background: transparent;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 10px;
-  cursor: default;
-  min-height: 160px;
+.q-text {
+  font-family: var(--font-serif);
+  font-size: 1.3rem; line-height: 1.55; color: var(--ink);
+  margin-bottom: 24px; font-weight: 400;
 }
-.card-add:hover {
-  border-color: var(--green-700);
-  border-style: dashed;
-  background: var(--green-50);
-  transform: none;
-  box-shadow: none;
-}
-.card-add-icon {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--ink-100);
+.q-text em { font-style: italic; color: var(--green-700); }
+.q-attr { display: flex; align-items: center; gap: 12px; }
+.q-avatar {
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--mint), var(--green-700));
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem; color: var(--ink-400);
+  font-size: 0.85rem; font-weight: 800; color: var(--white);
 }
-.card-add-label {
-  font-size: 0.875rem; font-weight: 600; color: var(--ink-400);
-}
-.card-add-sub {
-  font-size: 0.78rem; color: var(--ink-200);
-  max-width: 160px;
-}
+.q-name { font-weight: 700; font-size: 0.9rem; color: var(--ink); }
+.q-role { font-size: 0.8rem; color: var(--ink-400); margin-top: 2px; }
 
-/* FOOTER */
+/* Proof cards */
+.proof-cards { display: flex; flex-direction: column; gap: 14px; }
+.pcard {
+  background: var(--white); border: 1px solid var(--ink-200);
+  border-radius: var(--radius-lg); padding: 20px 22px;
+  display: flex; align-items: center; gap: 16px;
+  transition: all 0.2s;
+}
+.pcard:hover { box-shadow: var(--shadow-md); border-color: var(--green-400); }
+.pcard-logo {
+  width: 52px; height: 52px; border-radius: 10px; flex-shrink: 0;
+  background: var(--ink-50); border: 1px solid var(--ink-200);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem; font-weight: 800; color: var(--ink-600); text-align: center; line-height: 1.2;
+}
+.pcard-body { flex: 1; }
+.pcard-name { font-weight: 700; font-size: 0.875rem; color: var(--ink); margin-bottom: 3px; }
+.pcard-desc { font-size: 0.8rem; color: var(--ink-400); line-height: 1.45; }
+.pcard-stat {
+  font-family: var(--font-serif);
+  font-size: 1.5rem; font-weight: 400; color: var(--green-700); white-space: nowrap;
+  text-align: right; flex-shrink: 0;
+}
+.pcard-stat-lbl { font-size: 0.65rem; color: var(--ink-400); font-family: var(--font-sans); margin-top: 1px; white-space: nowrap; }
+
+/* ─── CTA SECTION ────────────────────────────────────────────── */
+.cta-section {
+  background: var(--ink-800); padding: 88px 40px;
+  color: var(--white); text-align: center;
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 800px; height: 400px; border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0,195,137,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-inner { max-width: 600px; margin: 0 auto; position: relative; z-index: 1; }
+h2.cta-h {
+  font-family: var(--font-serif);
+  font-size: 2.4rem; line-height: 1.15; color: var(--white);
+  margin-bottom: 16px; font-weight: 400;
+}
+h2.cta-h em { font-style: italic; color: var(--mint); }
+.cta-sub {
+  font-size: 1rem; color: rgba(255,255,255,0.55); line-height: 1.7;
+  margin-bottom: 40px;
+}
+.cta-form { display: flex; gap: 10px; max-width: 440px; margin: 0 auto 14px; }
+.cta-input {
+  flex: 1; padding: 13px 16px; border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.07); color: var(--white);
+  font-size: 0.9rem; font-family: var(--font-sans); outline: none;
+}
+.cta-input::placeholder { color: rgba(255,255,255,0.3); }
+.cta-input:focus { border-color: var(--mint); box-shadow: 0 0 0 3px var(--mint-dim); }
+.cta-note { font-size: 0.78rem; color: rgba(255,255,255,0.3); }
+.cta-options {
+  display: flex; gap: 24px; justify-content: center;
+  margin-top: 32px;
+}
+.cta-opt {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-lg); padding: 22px 24px; text-align: left;
+  flex: 1; max-width: 200px; transition: all 0.2s;
+}
+.cta-opt:hover { border-color: var(--mint-border); background: var(--mint-dim); }
+.cta-opt-ico { font-size: 1.4rem; margin-bottom: 10px; }
+.cta-opt-title { font-size: 0.875rem; font-weight: 700; color: var(--white); margin-bottom: 5px; }
+.cta-opt-desc { font-size: 0.78rem; color: rgba(255,255,255,0.45); line-height: 1.4; }
+
+/* ─── FOOTER ──────────────────────────────────────────────────── */
 footer {
   border-top: 1px solid var(--ink-200);
-  padding: 20px 40px;
+  padding: 24px 40px;
   display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 12px;
-  background: var(--white);
+  flex-wrap: wrap; gap: 14px;
 }
+.footer-left { display: flex; align-items: center; gap: 16px; }
+.footer-logo img { height: 20px; opacity: 0.7; }
 .footer-copy { font-size: 0.78rem; color: var(--ink-400); }
-.footer-link {
-  font-size: 0.78rem; color: var(--ink-400);
-  text-decoration: none; transition: color 0.15s;
+.footer-links { display: flex; gap: 20px; }
+.footer-links a { font-size: 0.78rem; color: var(--ink-400); transition: color 0.15s; }
+.footer-links a:hover { color: var(--green-700); }
+
+/* ─── ANIMATIONS ─────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-.footer-link:hover { color: var(--green-700); }
+.hero-left > * { animation: fadeUp 0.55s ease both; }
+.hero-left > *:nth-child(1) { animation-delay: 0.05s; }
+.hero-left > *:nth-child(2) { animation-delay: 0.12s; }
+.hero-left > *:nth-child(3) { animation-delay: 0.19s; }
+.hero-left > *:nth-child(4) { animation-delay: 0.26s; }
+.hero-left > *:nth-child(5) { animation-delay: 0.33s; }
+.hero-visual { animation: fadeUp 0.6s 0.2s ease both; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <div class="header-logo">
+<!-- ─── NAV ─── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <!-- Real Freshworks logo from dam.freshworks.com -->
+    <a href="https://www.freshworks.com/freshdesk/omni/" class="fw-logo">
       <img
         src="https://dam.freshworks.com/m/1d230ee78c07681a/original/headerLogoLight.webp"
+        alt="Freshworks"
+        onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+      />
+      <!-- Fallback if CDN unavailable -->
+      <span class="fw-logo-fallback" style="display:none;">
+        <span class="fw-logo-mark">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M4 10C4 7.2 6.2 5 9 5C11.4 5 13.4 6.7 13.9 9C14.3 6.3 16.2 4.2 18 4C15.5 4 14 6.3 14 9V13C14 13.6 13.6 14 13 14H10C7.2 14 5 11.8 5 9" fill="white"/>
+          </svg>
+        </span>
+        freshworks
+      </span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#">Product</a></li>
+      <li><a href="#">Solutions</a></li>
+      <li><a href="#">Customers</a></li>
+      <li><a href="#">Pricing</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="https://login.freshworks.com/email-login/" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="https://www.freshworks.com/freshdesk/omni/demo-request/" class="btn btn-green btn-sm">Book a demo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        Freshdesk Omni · Built for Canva
+      </div>
+
+      <h1 class="hero-headline">
+        Customer service that puts<br>
+        <em>Canva's people first</em>
+      </h1>
+
+      <p class="hero-sub">
+        190 million creators deserve support that feels genuinely human, not a bot maze that leaves them stuck. Freshdesk Omni gives your CX team AI that handles the complexity while your agents build the connections.
+      </p>
+
+      <div class="hero-ctas">
+        <a href="https://www.freshworks.com/freshdesk/omni/demo-request/" class="btn btn-green btn-lg">Book a Demo</a>
+        <a href="https://www.freshworks.com/freshdesk/omni/signup/" class="btn btn-outline-green btn-lg">Try it free</a>
+      </div>
+
+      <div class="hero-social-proof">
+        <div class="proof-avatars">
+          <div class="proof-avatar pa-1">K</div>
+          <div class="proof-avatar pa-2">P</div>
+          <div class="proof-avatar pa-3">H</div>
+          <div class="proof-avatar pa-4">7</div>
+        </div>
+        <span>Trusted by <strong>75,000+ businesses</strong> including Klarna, PhonePe &amp; Hobbycraft</span>
+      </div>
+    </div>
+
+    <!-- Command Center Mockup -->
+    <div class="hero-visual">
+      <div class="hero-visual-float-1">
+        <span class="float-icon">✨</span>
+        Freddy resolved <span class="float-green">143 tickets</span> today
+      </div>
+
+      <div class="cc">
+        <div class="cc-bar">
+          <div class="cc-dots">
+            <div class="cd cd-r"></div>
+            <div class="cd cd-y"></div>
+            <div class="cd cd-g"></div>
+          </div>
+          <span class="cc-label">FRESHDESK COMMAND CENTER</span>
+          <div class="cc-live"><span class="cc-live-dot"></span>Live</div>
+        </div>
+
+        <div class="cc-layout">
+          <!-- Sidebar -->
+          <div class="cc-sidebar">
+            <div class="cc-nav on">📥 All Conversations <span class="cc-badge">28</span></div>
+            <div class="cc-nav">🤖 Freddy AI</div>
+            <div class="cc-nav">💬 Chat</div>
+            <div class="cc-nav">📧 Email</div>
+            <div class="cc-nav">📱 WhatsApp</div>
+            <div class="cc-sep"></div>
+            <div class="cc-nav">🆓 Free Users</div>
+            <div class="cc-nav">⭐ Pro Users</div>
+            <div class="cc-nav">🏢 Enterprise</div>
+          </div>
+
+          <!-- Main -->
+          <div class="cc-main">
+            <!-- KPIs -->
+            <div class="kpi-row">
+              <div class="kpi">
+                <div class="kpi-val">94%</div>
+                <div class="kpi-lbl">CSAT Today</div>
+                <div class="kpi-delta">↑ +8% vs last month</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-val">58%</div>
+                <div class="kpi-lbl">Freddy AI resolved</div>
+                <div class="kpi-delta">↑ from 12%</div>
+              </div>
+              <div class="kpi">
+                <div class="kpi-val">1m 24s</div>
+                <div class="kpi-lbl">Avg response</div>
+                <div class="kpi-delta">↓ 67% faster</div>
+              </div>
+            </div>
+
+            <!-- Freddy mini card -->
+            <div class="freddy-mini">
+              <div class="freddy-mini-head">
+                <div class="freddy-orb">F</div>
+                <div>
+                  <div class="freddy-mini-name">Freddy AI Agent</div>
+                  <div class="freddy-mini-status">Active · handling 18 conversations now</div>
+                </div>
+              </div>
+              <div class="freddy-stats">
+                <div class="fs">
+                  <div class="fs-val">143</div>
+                  <div class="fs-lbl">Auto-resolved today</div>
+                </div>
+                <div class="fs">
+                  <div class="fs-val">&lt;30s</div>
+                  <div class="fs-lbl">Avg Freddy response</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ticket feed -->
+            <div>
+              <div class="feed-label">Recent conversations</div>
+              <div class="ticket">
+                <div class="t-dot" style="background:#16A34A"></div>
+                <div class="t-body">
+                  <div class="t-title">"Can't download my design as PDF"</div>
+                  <div class="t-meta">💬 Chat · Free user · 2 min ago</div>
+                </div>
+                <span class="t-tag tag-ai">Freddy resolved</span>
+              </div>
+              <div class="ticket">
+                <div class="t-dot" style="background:#2563EB"></div>
+                <div class="t-body">
+                  <div class="t-title">Canva for Teams billing, 250 seats</div>
+                  <div class="t-meta">📧 Email · Enterprise · 6 min ago</div>
+                </div>
+                <span class="t-tag tag-pro">Agent assigned</span>
+              </div>
+              <div class="ticket">
+                <div class="t-dot" style="background:#DC2626"></div>
+                <div class="t-body">
+                  <div class="t-title">Brand Kit deleted, client pitch in 1hr</div>
+                  <div class="t-meta">💬 Chat · Pro user · 8 min ago</div>
+                </div>
+                <span class="t-tag tag-urg">Urgent</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual-float-2">
+        <span class="float-icon">🌐</span>
+        Email · Chat · WhatsApp · Social: <span class="float-green">one inbox</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TRUST BAR: Real Freshworks customers ─── -->
+<div class="trust">
+  <div class="trust-inner">
+    <p class="trust-lbl">Trusted by 75,000+ businesses worldwide, including</p>
+    <div class="trust-logos">
+      <span class="trust-logo">Klarna</span>
+      <span class="trust-logo">PhonePe</span>
+      <span class="trust-logo">Hobbycraft</span>
+      <span class="trust-logo">Carrefour</span>
+      <span class="trust-logo">7-Eleven</span>
+      <span class="trust-logo">Bridgestone</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CHALLENGES ─── -->
+<section class="section">
+  <div class="section-inner">
+    <p class="eyebrow">The Challenge</p>
+    <h2 class="section-h">Freemium at 190M users is a support<br><em>category of its own</em></h2>
+    <p class="section-desc">When your user base spans every skill level, timezone, and plan tier. A generic helpdesk creates the exact friction your product is designed to eliminate.</p>
+    <div class="challenge-grid">
+      <div class="ch-card">
+        <div class="ch-icon">🎨</div>
+        <h3>A beginner and a brand designer need very different answers</h3>
+        <p>The free user who can't find the resize button and the CMO debugging a custom font integration shouldn't get the same bot response. Context-aware support is your brand promise made real.</p>
+      </div>
+      <div class="ch-card">
+        <div class="ch-icon">📈</div>
+        <h3>Growth is outpacing headcount, and the gap is widening</h3>
+        <p>With user numbers growing year over year, you can't hire your way through ticket volume. You need AI that handles the routine <em>intelligently</em>, so your agents focus on the conversations that matter.</p>
+      </div>
+      <div class="ch-card">
+        <div class="ch-icon">💸</div>
+        <h3>Every frustrated free user is a missed Pro conversion</h3>
+        <p>A user who can't get help doesn't upgrade. They leave. For a freemium business, support isn't a cost center. It's a direct driver of conversion, NPS, and lifetime value.</p>
+      </div>
+      <div class="ch-card">
+        <div class="ch-icon">📱</div>
+        <h3>Creators reach out everywhere and expect one coherent voice back</h3>
+        <p>Twitter DMs. In-app chat. Email. Community forums. WhatsApp. Your users don't choose a channel based on what's convenient for your team. They use whatever's in front of them in the moment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FREDDY AI SECTION ─── -->
+<section class="freddy-section">
+  <div class="freddy-inner">
+
+    <div class="freddy-header">
+      <!-- Left: messaging -->
+      <div>
+        <div class="freddy-eyebrow">
+          <span class="demo-badge-dot"></span>
+          Meet Freddy AI
+        </div>
+        <h2 class="freddy-h">AI that <em>helps people</em>.<br>It doesn't just deflect them</h2>
+        <p class="freddy-body-text">
+          Most AI support tools make customers feel like they're being avoided. There's a wall between them and help, and that wall is a bot. Freddy AI is built on a completely different philosophy.
+        </p>
+        <p class="freddy-body-text">
+          Freddy's job isn't to close tickets. It's to genuinely solve problems. It knows when a free user needs a quick tutorial, when a Pro user needs a real person, and when an Enterprise Brand Kit crisis needs immediate escalation. It keeps the conversation warm, moves fast, and never leaves anyone feeling fobbed off.
+        </p>
+        <div class="freddy-warmth">
+          <strong>"People-first AI means your focus stays on customers, not busywork."</strong> That's the Freshdesk Omni principle behind Freddy: a Copilot for your agents, an agent for your customers, and an intelligence layer for your leaders. All in one.
+        </div>
+      </div>
+
+      <!-- Right: Live chat demo -->
+      <div class="freddy-demo">
+        <div class="demo-head">
+          <div class="demo-title">Freddy AI in action: Canva support</div>
+          <div class="demo-badge"><span class="demo-badge-dot"></span> Live</div>
+        </div>
+
+        <div class="demo-user-info">
+          <div class="demo-user-dot">SC</div>
+          <div class="duo-row">
+            <div class="duo-name">Sarah Chen</div>
+            <div class="duo-plan">Canva Pro · 3 years active</div>
+          </div>
+          <div style="margin-left:auto;font-size:0.65rem;color:rgba(255,255,255,0.4);">Chat channel</div>
+        </div>
+
+        <div class="chat-wrap">
+          <div class="bubble bubble-user">
+            Hi, my PDF export keeps failing and I have a client presentation in 30 mins 😬 really need help
+          </div>
+          <div class="bubble bubble-freddy">
+            <div class="bubble-label">Freddy AI · Canva Support</div>
+            No worries, let's sort this quickly! This usually happens with heavy background images. Quick fix: go to Download → choose PDF Print instead of PDF Standard, which resolves it for most designs. Trying now?
+          </div>
+          <div class="bubble bubble-user">Oh wow that worked immediately!! Thank you!!</div>
+          <div class="bubble bubble-freddy">
+            <div class="bubble-label">Freddy AI · Canva Support</div>
+            Brilliant! As a Pro user you also have the compressed PDF option for smaller files, great for email. Anything else before your presentation? You've got this 👍
+          </div>
+        </div>
+
+        <div class="demo-resolved">
+          <span class="demo-resolved-icon">✅</span>
+          <div>Resolved in <strong style="color:#86EFAC;">47 seconds</strong> · No agent needed · CSAT: <strong style="color:#86EFAC;">⭐ 5.0</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Freddy pillars: matching freshworks.com/freshdesk/omni language -->
+    <div class="freddy-pillars">
+      <div class="pillar">
+        <div class="pillar-ico">🤖</div>
+        <h3>Freddy AI Agent</h3>
+        <p>Resolves up to 80% of routine queries automatically: export questions, billing issues, how-to tutorials. Uses Canva's knowledge base, around the clock, across every language your users speak.</p>
+        <span class="pillar-chip">Up to 80% auto-resolution</span>
+      </div>
+      <div class="pillar">
+        <div class="pillar-ico">💡</div>
+        <h3>Freddy AI Copilot</h3>
+        <p>When agents take over complex cases, Freddy Copilot sits alongside them, surfacing the right knowledge articles, suggesting replies, flagging sentiment, and summarising long threads instantly. Faster answers. Less burnout.</p>
+        <span class="pillar-chip">60% agent productivity uplift</span>
+      </div>
+      <div class="pillar">
+        <div class="pillar-ico">📊</div>
+        <h3>Freddy AI Insights</h3>
+        <p>Your CX leaders get real-time visibility into what's driving volume, where CSAT is dipping, and which Canva features are causing friction and turning support data into a direct product feedback loop.</p>
+        <span class="pillar-chip">Proactive, actionable intelligence</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CAPABILITIES ─── -->
+<section class="section section-alt">
+  <div class="section-inner">
+    <p class="eyebrow">Freshdesk Omni Capabilities</p>
+    <h2 class="section-h">Everything in one <em>Command Center</em></h2>
+    <p class="section-desc">Get everything your team needs for faster resolutions in a single, connected workspace. No tab switching. No lost context. No busywork. Just resolution.</p>
+    <div class="caps-grid">
+      <div class="cap">
+        <div class="cap-ico">📥</div>
+        <h3>Unified Omnichannel Inbox</h3>
+        <p>Email, in-app chat, WhatsApp, Twitter DMs, Instagram: every Canva user conversation in one place, with full history attached. Channel no longer dictates quality of care.</p>
+        <span class="cap-tag">97% first contact resolution</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">🎯</div>
+        <h3>Intelligent Routing by Plan Tier</h3>
+        <p>Free users get instant self-service. Pro users reach tier-1 agents. Canva for Teams accounts get dedicated specialists with SLAs matching their contract. Automatic, every time.</p>
+        <span class="cap-tag">Smart skill-based routing</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">📖</div>
+        <h3>Branded Self-Service Help Center</h3>
+        <p>A searchable, Canva-branded knowledge base your users actually want to use. Deflect common queries before they become tickets. Freddy AI surfaces the right article instantly.</p>
+        <span class="cap-tag">Reduce ticket volume at source</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">⚡</div>
+        <h3>Workflows &amp; Automations</h3>
+        <p>Auto-route, auto-escalate, auto-tag, auto-resolve. Set SLA-based rules and channel-specific business hours once and let the system run. 50+ prebuilt agentic workflows, ready to launch.</p>
+        <span class="cap-tag">50+ prebuilt workflows</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">📊</div>
+        <h3>Omnichannel Analytics &amp; Dashboards</h3>
+        <p>CSAT by channel. Ticket trends by Canva feature area. Agent performance and peak forecasting. Turn support data into a feedback loop that makes Canva better for everyone.</p>
+        <span class="cap-tag">Data-driven CX decisions</span>
+      </div>
+      <div class="cap">
+        <div class="cap-ico">🔌</div>
+        <h3>Switch on New Channels Overnight</h3>
+        <p>WhatsApp, Instagram, Facebook. They plug directly into the same workspace. Admins enable new channels in minutes. 650+ integrations. Open APIs for anything custom. No rip-and-replace.</p>
+        <span class="cap-tag">Set up overnight</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── METRICS STRIP: Real Freshdesk Omni stats ─── -->
+<div class="metrics">
+  <div class="metrics-inner">
+    <p class="metrics-eyebrow">Industry-leading results with Freshdesk Omni · sourced from Customer Results &amp; Benchmark Report 2025</p>
+    <div class="metrics-grid">
+      <div class="metric">
+        <div class="metric-val">80<sup>%</sup></div>
+        <div class="metric-lbl">Resolutions with<br>Freddy AI Agent</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">&lt;2<sub>min</sub></div>
+        <div class="metric-lbl">Average conversational<br>resolution time</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">97<sup>%</sup></div>
+        <div class="metric-lbl">Omnichannel first<br>contact resolution rate</div>
+      </div>
+      <div class="metric">
+        <div class="metric-val">60<sup>%</sup></div>
+        <div class="metric-lbl">Agent productivity uplift<br>with Freddy AI Copilot</div>
+      </div>
+    </div>
+    <p class="metrics-footnote">*Stats sourced from Freshworks Customer Results and Customer Service Benchmark Report 2025</p>
+  </div>
+</div>
+
+<!-- ─── CUSTOMER PROOF: Real Freshworks customers from freshworks.com/customers ─── -->
+<section class="proof-section">
+  <div class="proof-inner">
+    <p class="eyebrow">Companies just like Canva have done it</p>
+    <h2 class="section-h">Real results from the <em>Freshworks customer base</em></h2>
+
+    <div class="proof-grid">
+      <!-- Featured quote: real from Freshworks customer repo -->
+      <div class="quote-block">
+        <div class="q-top">
+          <span class="q-badge">PhonePe · Freshworks customer</span>
+          <span style="font-size:1.5rem;color:var(--green-700);">"</span>
+        </div>
+        <p class="q-text">
+          We adopted Freshworks' Freddy platform for a highly automated and personalized customer experience. <em>PhonePe now resolves 80% of customer service inquiries without human intervention</em> and CSAT scores for Freddy conversations are actually higher than traditional channels.
+        </p>
+        <div class="q-attr">
+          <div class="q-avatar">VG</div>
+          <div>
+            <div class="q-name">Vishal Gupta</div>
+            <div class="q-role">Head of Product, PhonePe · 300M+ registered users</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proof cards: all real Freshworks customers -->
+      <div class="proof-cards">
+        <div class="pcard">
+          <div class="pcard-logo">Phone<br>Pe</div>
+          <div class="pcard-body">
+            <div class="pcard-name">PhonePe: 300M+ users, payments SaaS</div>
+            <div class="pcard-desc">Automated 850+ query types with Freddy AI. Scaled support without scaling headcount.</div>
+          </div>
+          <div>
+            <div class="pcard-stat">80%</div>
+            <div class="pcard-stat-lbl">auto-resolved</div>
+          </div>
+        </div>
+
+        <div class="pcard">
+          <div class="pcard-logo">Klar<br>na</div>
+          <div class="pcard-body">
+            <div class="pcard-name">Klarna: 80M customers, fintech platform</div>
+            <div class="pcard-desc">60s first response SLA across 7 countries. Shifted 66% of volume to chat with Freddy bots.</div>
+          </div>
+          <div>
+            <div class="pcard-stat">60s</div>
+            <div class="pcard-stat-lbl">first response</div>
+          </div>
+        </div>
+
+        <div class="pcard">
+          <div class="pcard-logo">Hobby<br>craft</div>
+          <div class="pcard-body">
+            <div class="pcard-name">Hobbycraft: UK's's leading craft retailer</div>
+            <div class="pcard-desc">Freddy AI handles 30% of questions. 82% of tickets resolved at first contact. 25% CSAT uplift.</div>
+          </div>
+          <div>
+            <div class="pcard-stat">30%</div>
+            <div class="pcard-stat-lbl">AI-handled</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA SECTION ─── -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="cta-h">See Freshdesk Omni<br>built <em>for Canva</em></h2>
+    <p class="cta-sub">
+      We'll show you exactly how Freshdesk handles freemium support at 190M scale, from Freddy AI deflection to Pro/Enterprise routing, in a 45-minute session tailored to your workflows.
+    </p>
+    <div class="cta-form">
+      <input class="cta-input" type="email" placeholder="you@canva.com" />
+      <a href="https://www.freshworks.com/freshdesk/omni/demo-request/" class="btn btn-green btn-lg">Book your demo</a>
+    </div>
+    <p class="cta-note">No credit card required · Free trial available · Set up in minutes</p>
+
+    <div class="cta-options">
+      <div class="cta-opt">
+        <div class="cta-opt-ico">🎯</div>
+        <div class="cta-opt-title">Free Trial</div>
+        <div class="cta-opt-desc">Try it free, no card needed</div>
+      </div>
+      <div class="cta-opt">
+        <div class="cta-opt-ico">📋</div>
+        <div class="cta-opt-title">Product Tour</div>
+        <div class="cta-opt-desc">Explore at your own pace</div>
+      </div>
+      <div class="cta-opt">
+        <div class="cta-opt-ico">📞</div>
+        <div class="cta-opt-title">Talk to Sales</div>
+        <div class="cta-opt-desc">sales@freshworks.com</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo">
+      <img
+        src="https://dam.freshworks.com/m/329aae6a552dcfa8/original/freshworks-logoBlack.svg"
         alt="Freshworks"
         onerror="this.style.display='none'"
       />
     </div>
-    <div class="header-badge">
-      <span class="badge-dot"></span>
-      Freshdesk Omni
-    </div>
+    <span class="footer-copy">© 2025 Freshworks Inc. All Rights Reserved</span>
   </div>
-</header>
-
-<div class="hero">
-  <div class="hero-inner">
-    <h1>Customer service that puts<br><em>your people first</em></h1>
-    <p>Prospect-specific landing pages showing how Freshdesk Omni and Freddy AI solve the real support challenges each company faces.</p>
+  <div class="footer-links">
+    <a href="https://www.freshworks.com/privacy/">Privacy Notice</a>
+    <a href="https://www.freshworks.com/site-terms/">Site Terms</a>
+    <a href="https://www.freshworks.com/security/">Security</a>
+    <a href="https://www.freshworks.com/contact/">Contact Freshworks</a>
   </div>
-</div>
-
-<main>
-  <p class="grid-label">Prospect landing pages</p>
-  <div class="prospects">
-
-    <!-- Canva -->
-    <a href="landing-pages/canva-v2.html" class="card" style="--card-color:#7C3AED; --card-bg:#F5F3FF;">
-      <div class="card-top">
-        <div class="card-logo">🎨</div>
-        <div class="card-arrow">→</div>
-      </div>
-      <div class="card-name">Canva</div>
-      <div class="card-desc">Freemium SaaS at 190M users. Freddy AI handles the volume so agents focus on the moments that drive conversion.</div>
-      <span class="card-tag">Freemium SaaS</span>
-    </a>
-
-    <!-- Airbnb -->
-    <a href="landing-pages/airbnb.html" class="card" style="--card-color:#FF385C; --card-bg:#FFF1F3;">
-      <div class="card-top">
-        <div class="card-logo">🏠</div>
-        <div class="card-arrow">→</div>
-      </div>
-      <div class="card-name">Airbnb</div>
-      <div class="card-desc">Two-sided marketplace. Unified host and guest timelines so every dispute gets resolved with the full picture.</div>
-      <span class="card-tag">Two-sided marketplace</span>
-    </a>
-
-    <!-- Zoom -->
-    <a href="landing-pages/zoom.html" class="card" style="--card-color:#0B5CFF; --card-bg:#EFF6FF;">
-      <div class="card-top">
-        <div class="card-logo">📹</div>
-        <div class="card-arrow">→</div>
-      </div>
-      <div class="card-name">Zoom</div>
-      <div class="card-desc">Enterprise SaaS at global scale. AI deflection for millions of users without adding headcount.</div>
-      <span class="card-tag">Enterprise SaaS</span>
-    </a>
-
-    <!-- Netflix -->
-    <a href="landing-pages/netflix.html" class="card" style="--card-color:#E50914; --card-bg:#FFF1F1;">
-      <div class="card-top">
-        <div class="card-logo">🎬</div>
-        <div class="card-arrow">→</div>
-      </div>
-      <div class="card-name">Netflix</div>
-      <div class="card-desc">Subscription retention at 190+ countries. Every support interaction is a chance to prevent a cancellation.</div>
-      <span class="card-tag">Subscription</span>
-    </a>
-
-    <!-- Uber -->
-    <a href="landing-pages/uber.html" class="card" style="--card-color:#000000; --card-bg:#F3F4F6;">
-      <div class="card-top">
-        <div class="card-logo">🚗</div>
-        <div class="card-arrow">→</div>
-      </div>
-      <div class="card-name">Uber</div>
-      <div class="card-desc">Driver and rider support across 72 countries. One platform for both sides of every trip dispute.</div>
-      <span class="card-tag">Two-sided marketplace</span>
-    </a>
-
-    <!-- Add more placeholder -->
-    <div class="card card-add">
-      <div class="card-add-icon">+</div>
-      <div class="card-add-label">Add a prospect</div>
-      <div class="card-add-sub">Add an HTML file to landing-pages/, then add a card here</div>
-    </div>
-
-  </div>
-</main>
-
-<footer>
-  <span class="footer-copy">© 2025 Freshworks Inc. All Rights Reserved</span>
-  <a href="https://www.freshworks.com/freshdesk/omni/" class="footer-link">freshworks.com/freshdesk/omni</a>
 </footer>
 
 </body>
